@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moodle Course Creator Workshop</title>
+    <!-- Load Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configure Tailwind to use JIT and customize theme if needed -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#4f46e5', // Indigo-600
+                        'secondary': '#06b6d4', // Cyan-600
+                        'accent-green': '#10b981', // Green-600
+                        'accent-red': '#ef4444', // Red-500
+                        'bg-light': '#f8fafc',
+                        'bg-grey-nav': '#f3f4f6',
+                        'text-dark': '#1f2937',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom CSS (styles.css combined here) -->
+    <style>
+        /* * Custom CSS for Moodle Course Creator Workshop
+        * This file contains structural CSS that cannot be easily expressed with Tailwind utilities,
+        * primarily for animations, transitions, and fixed/responsive layouts.
+        */
+
+        /* ======================================= */
+        /* 1. Base Styles & Custom Fonts */
+        /* ======================================= */
+
+        body {
+            /* Set scroll-behavior to smooth for better navigation experience */
+            scroll-behavior: smooth;
+        }
+
+        /* Ensures sections snap slightly below the top bar/controls when navigating */
+        .scroll-mt-custom {
+            scroll-margin-top: 80px; 
+        }
+
+        /* Utility class for primary content sections */
+        .module-section {
+            /* Base styling for sections */
+            margin-bottom: 3rem;
+            background-color: #ffffff;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+
+        /* ======================================= */
+        /* 2. Responsive Layout & Sidebar */
+        /* ======================================= */
+
+        /* Desktop Layout (min-width: 768px) */
+        @media (min-width: 768px) {
+            .sidebar {
+                /* Fixed position, full height, width, and transitions controlled by JS */
+                width: 250px;
+                transition: transform 0.3s ease, margin-left 0.3s ease;
+                transform: translateX(0); 
+            }
+            .main-content-wrapper {
+                /* Initial offset to prevent overlap with sidebar when open */
+                margin-left: 250px;
+                transition: margin-left 0.3s ease;
+            }
+            /* Hidden state for sidebar on desktop (toggled by JS) */
+            .sidebar.hidden-sidebar {
+                transform: translateX(-250px);
+            }
+            /* Content pushed back to full width when sidebar is hidden (toggled by JS) */
+            .main-content-wrapper.full-width {
+                margin-left: 0;
+            }
+            /* Fixed controls position adjustment when sidebar is hidden (toggled by JS) */
+            #fixed-controls.full-width {
+                left: 1.5rem; /* Moves controls to the left edge */
+            }
+        }
+
+        /* Mobile Layout (max-width: 767px) */
+        @media (max-width: 767px) {
+            .sidebar {
+                /* Full screen overlay when active */
+                position: fixed; 
+                width: 100%;
+                height: 100vh;
+                top: 0;
+                left: 0;
+                z-index: 50;
+                /* Start hidden off-screen */
+                transform: translateX(-100%); 
+                transition: transform 0.3s ease;
+            }
+            /* Sidebar becomes visible on mobile (toggled by JS) */
+            .sidebar.active-mobile {
+                transform: translateX(0);
+                box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            }
+            /* Main content does not need margin offset on mobile */
+            .main-content-wrapper {
+                margin-left: 0;
+                padding-top: 16px;
+                min-height: 100vh;
+            }
+            /* Ensure body contents stack */
+            body {
+                display: flex; /* Overridden by utility class, but good practice */
+                flex-direction: column;
+            }
+        }
+
+
+        /* ======================================= */
+        /* 3. Component Styles (Flashcards, Accordion, Process) */
+        /* ======================================= */
+
+        /* --- Flashcard Styles (Click to Flip) --- */
+        .flashcard-grid {
+            perspective: 1000px;
+        }
+        .flashcard {
+            height: 150px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+        .flashcard-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            background-color: white; /* Ensure faces are white */
+        }
+        .flashcard-front {
+            /* Styles for the front of the card */
+            background-color: #e0f2f1; /* Light cyan/indigo for visual interest */
+            color: #1f2937;
+            font-weight: bold;
+        }
+        .flashcard-back {
+            /* Styles for the back of the card */
+            transform: rotateY(180deg);
+            font-size: 0.875rem;
+            line-height: 1.2;
+            text-align: center;
+            align-items: center;
+            background-color: #f0f9ff;
+            color: #1f2937;
+        }
+
+        /* --- Accordion Styles (Module 6) --- */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+            padding: 0; /* Starts collapsed */
+        }
+        .accordion-content.active {
+            max-height: 2000px; /* Sufficient height for smooth transition */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .accordion-icon {
+            transition: transform 0.4s;
+        }
+        .accordion-header.active .accordion-icon {
+            transform: rotate(45deg); 
+        }
+
+        /* --- Process Block Styles (Module 2) --- */
+        .process-step {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+        .process-step.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Reading Mode Overrides --- */
+
+        .reading-mode {
+            background-color: #fcf6e4; /* Light cream/yellow background */
+            color: #1a1a1a; /* Very dark text */
+        }
+        .reading-mode h1, .reading-mode h2, .reading-mode h3, .reading-mode h4 {
+            color: #000000 !important;
+        }
+        .reading-mode p, .reading-mode li, .reading-mode a, .reading-mode th, .reading-mode td {
+            font-size: 1.15rem !important; 
+            line-height: 1.8 !important; 
+            font-family: Georgia, serif !important; /* Use a default serif font */
+        }
+        /* Force background colors to adapt in reading mode */
+        .reading-mode .bg-white, 
+        .reading-mode .sidebar {
+            background-color: #fcf6e4 !important;
+        }
+        .reading-mode .bg-gray-100 {
+            background-color: #f8f0d8 !important; /* Slightly darker cream for contrast */
+        }
+        .reading-mode .bg-indigo-100, .reading-mode .bg-cyan-100, .reading-mode .bg-green-100, .reading-mode .bg-red-100 {
+            background-color: #f8f0d8 !important;
+        }
+        .reading-mode .addie-point, .reading-mode .lesson-point {
+            background-color: #f8f0d8 !important;
+        }
+        .reading-mode .nav-link {
+            background-color: #f8f0d8 !important;
+        }
+        .reading-mode a {
+            color: #0066cc !important; 
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body class="bg-bg-light flex flex-col md:flex-row min-h-screen">
+
+    <!-- Left Sidebar (Fixed Navigation) -->
+    <aside id="sidebar" class="sidebar fixed md:h-full shadow-xl p-6 overflow-y-auto z-50 h-screen bg-bg-grey-nav">
+        <!-- Close button (Mobile Only) -->
+        <button id="close-menu-btn" class="md:hidden absolute top-4 right-4 text-gray-500 hover:text-gray-900" onclick="toggleSidebar()">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+
+        <!-- Course Title in Sidebar (Home Button) -->
+        <a href="#top" class="block">
+            <h1 class="text-xl font-extrabold text-indigo-800 mb-6 border-b pb-3 hover:text-indigo-600 transition duration-150">Course Outline</h1>
+        </a>
+        
+        <!-- Navigation (Module Links) -->
+        <nav id="module-nav" class="flex flex-col gap-2">
+            <!-- Nav links use JS/CSS for styling and active state tracking -->
+            <a href="#module-1" data-accent="accent-indigo" class="nav-link text-sm px-3 py-2 rounded-lg transition duration-150" onclick="if(window.innerWidth < 768) toggleSidebar()">1. 👋 Welcome & Intro</a>
+            <a href="#module-2" data-accent="accent-indigo" class="nav-link text-sm px-3 py-2 rounded-lg transition duration-150" onclick="if(window.innerWidth < 768) toggleSidebar()">2. ⚙️ Fundamentals of eCourse Creation</a>
+            <a href="#module-3" data-accent="accent-indigo" class="nav-link text-sm px-3 py-2 rounded-lg transition duration-150" onclick="if(window.innerWidth < 768) toggleSidebar()">3. 🧩 Moodle Activities & Resources</a>
+            <a href="#module-4" data-accent="accent-indigo" class="nav-link text-sm px-3 py-2 rounded-lg transition duration-150" onclick="if(window.innerWidth < 768) toggleSidebar()">4. 👤 Instructor Role & Responsibilities</a>
+            <a href="#module-5" data-accent="accent-cyan" class="nav-link text-sm px-3 py-2 rounded-lg transition duration-150" onclick="if(window.innerWidth < 768) toggleSidebar()">5. 📐 ID Strategy: ADDIE Model</a>
+            <a href="#module-6" data-accent="accent-green" class="nav-link text-sm px-3 py-2 rounded-lg transition duration-150" onclick="if(window.innerWidth < 768) toggleSidebar()">6. 💡 Engagement Techniques</a>
+            <a href="#module-7" data-accent="accent-red" class="nav-link text-sm px-3 py-2 rounded-lg transition duration-150" onclick="if(window.innerWidth < 768) toggleSidebar()">7. ♿ Course Accessibility</a>
+            <a href="#module-8" data-accent="accent-indigo" class="nav-link text-sm px-3 py-2 rounded-lg transition duration-150" onclick="if(window.innerWidth < 768) toggleSidebar()">8. 📦 SCORM Explained</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area (Scrollable) -->
+    <div id="content-wrapper" class="main-content-wrapper flex-1 px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Fixed Controls Container -->
+        <div id="fixed-controls" class="flex space-x-2 md:fixed md:top-6 md:z-40 mb-4">
+            <!-- Toggle Sidebar Button -->
+            <button id="toggle-menu-btn-main" class="p-2 bg-indigo-600 text-white rounded-full shadow-lg hover:bg-indigo-700 transition duration-150" onclick="toggleSidebar()" title="Toggle Sidebar">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+            <!-- Reading Mode Button -->
+            <button id="toggle-reading-mode-btn" class="p-2 bg-gray-600 text-white rounded-full shadow-lg hover:bg-gray-700 transition duration-150 text-base font-semibold" onclick="toggleReadingMode()" title="Toggle Reading Mode">
+                Aa
+            </button>
+        </div>
+        
+        <!-- Spacer to push content down past the fixed controls area on mobile -->
+        <div class="h-16 md:hidden"></div>
+        
+        <!-- Anchor for Home button / Scroll to Top -->
+        <a id="top" class="scroll-mt-custom"></a>
+
+        <!-- Course Introduction -->
+        <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg mb-10 border-l-4 border-indigo-500">
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">Moodle Course Creator Workshop</h2>
+            <p class="text-lg text-gray-600">
+                **Workshop Version 18.11.2025**
+            </p>
+            <p class="mt-4 text-gray-700 italic">
+                Think of this as your Moodle Course Creator handbook. Don't worry about reading everything right now—focus on the basics, and use the optional sections as a library to help you with future projects.
+            </p>
+        </div>
+
+        <!-- Module 1: Welcome and introduction -->
+        <section id="module-1" class="scroll-mt-custom module-section">
+            <h2 class="text-2xl font-extrabold text-indigo-800 mb-4">1. 👋 Welcome and Introduction</h2>
+            <p class="text-gray-600 mb-4 font-medium">**Session Format:** Duration: 2 hours | Mode: Online (live virtual session) | Format: Presentation, demonstration, and interactive discussion.</p>
+            
+            <h3 class="text-xl font-bold text-gray-700 mt-6 mb-3 border-b pb-1">Expected Outcomes (Learning Objectives)</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2 ml-4">
+                <li>Understand the basic structure and components of an eCourse.</li>
+                <li>Learn the key responsibilities and expectations of RIF Academy instructors.</li>
+                <li>Explore the process of preparing and uploading a course on the platform.</li>
+                <li>Gain awareness of tools and resources for creating engaging learning content.</li>
+                <li>Successfully publish a basic eCourse on the RIF Academy platform as a post-session assignment.</li>
+            </ul>
+
+            <h3 class="text-xl font-bold text-gray-700 mt-6 mb-3 border-b pb-1">Resources Provided</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4">
+                <li>eCourse planning template</li>
+                <li>Instructor onboarding checklist</li>
+                <li>RIF Academy style and content guide</li>
+                <li>Access to post-workshop support group</li>
+                <li>Assignment instruction</li>
+            </ul>
+
+            <div class="mt-6 p-4 bg-indigo-50 border-l-4 border-indigo-500 rounded-lg">
+                <p class="font-medium text-indigo-800">Note: This material primarily consists of video tutorials. We recommend using a split-screen view to follow the steps side-by-side.</p>
+            </div>
+
+            <!-- ADDITIONAL RESOURCES 1 -->
+            <div class="mt-8 p-6 bg-gray-100 rounded-xl border-l-4 border-cyan-500 shadow-sm">
+                <h4 class="text-xl font-bold text-gray-700 mb-3 border-b border-gray-300 pb-1">Additional Resources</h4>
+                <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4 text-sm">
+                    <li><a href="#" class="text-indigo-600 hover:underline">RIF Academy Instructor Handbook (Internal Link)</a></li>
+                    <li><a href="#" class="text-indigo-600 hover:underline">Moodle.org Official Documentation: Course Creation Basics</a></li>
+                    <li><a href="#" class="text-indigo-600 hover:underline">RIF Academy Style Guide: Branding and Tone</a></li>
+                </ul>
+            </div>
+
+            <!-- KNOWLEDGE CHECK 1 -->
+            <div class="knowledge-check-activity bg-indigo-100 p-6 rounded-xl border-t-4 border-indigo-500 mt-10 shadow-inner">
+                <h4 class="knowledge-check-title text-indigo-800">Knowledge Check: Module 1 Fundamentals</h4>
+                
+                <!-- Q1: Multiple Choice -->
+                <div class="knowledge-check-item">
+                    <p class="font-semibold text-gray-800 mb-2">1. The purpose of the post-session assignment is to:</p>
+                    <div class="space-y-1 text-sm">
+                        <label><input type="radio" name="kc1_q1" value="a"> A) Fully complete the Moodle Administrator Certification.</label>
+                        <label><input type="radio" name="kc1_q1" value="b"> B) Successfully publish one basic eCourse on the RIF Academy platform.</label>
+                        <label><input type="radio" name="kc1_q1" value="c"> C) Grade three other students' assignments using a rubric.</label>
+                    </div>
+                    <button class="mt-3 bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700" onclick="checkMultipleChoice('kc1_q1', 'b')">Check Answer</button>
+                    <p class="feedback-kc1_q1 text-sm mt-2 font-medium hidden"></p>
+                </div>
+
+                <!-- Q2: Fill-in-the-Blank -->
+                <div class="knowledge-check-item">
+                    <p class="font-semibold text-gray-800 mb-2">2. This course recommends using a ________ view to follow video tutorials side-by-side.</p>
+                    <input type="text" id="kc1_q2_input" class="w-full border rounded-md p-2 text-sm" placeholder="Type your answer...">
+                    <button class="mt-3 bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700" onclick="checkFillInTheBlank('kc1_q2', ['split-screen', 'splitscreen'])">Check Answer</button>
+                    <p class="feedback-kc1_q2 text-sm mt-2 font-medium hidden"></p>
+                </div>
+
+                <!-- Q3: True/False -->
+                <div class="knowledge-check-item">
+                    <p class="font-semibold text-gray-800 mb-2">3. True or False: This workshop is primarily conducted through asynchronous forum discussions.</p>
+                    <div class="space-x-4 text-sm">
+                        <label><input type="radio" name="kc1_q3" value="true"> True</label>
+                        <label><input type="radio" name="kc1_q3" value="false"> False</label>
+                    </div>
+                    <button class="mt-3 bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700" onclick="checkMultipleChoice('kc1_q3', 'false')">Check Answer</button>
+                    <p class="feedback-kc1_q3 text-sm mt-2 font-medium hidden"></p>
+                </div>
+
+            </div>
+            <a href="#top" class="mt-4 block text-right text-gray-500 text-sm hover:text-gray-700">Back to Top</a>
+        </section>
+
+        <!-- Module 2: Fundamentals of eCourse Creation -->
+        <section id="module-2" class="scroll-mt-custom module-section">
+            <h2 class="text-2xl font-extrabold text-indigo-800 mb-4">2. ⚙️ Fundamentals of eCourse Creation</h2>
+            <p class="text-gray-600 mb-6 font-medium">**Agenda Items:** (Approx. 40 minutes) Understanding course structure, planning content, and introduction to basic content types.</p>
+            
+            <h3 class="text-xl font-bold text-gray-700 mt-6 mb-3 border-b pb-1">Core Setup Steps (5-Step Process)</h3>
+            
+            <!-- Process Container -->
+            <div class="bg-gray-50 p-6 rounded-lg shadow-inner">
+                <div id="process-steps" class="space-y-4 mb-6">
+                    <!-- Step 1 -->
+                    <div id="step-1" class="process-step active">
+                        <div class="text-sm font-bold text-indigo-600 mb-2">Step 01 / 05</div>
+                        <h4 class="text-xl font-extrabold text-gray-900 mb-3">Navigate to Site Administration</h4>
+                        <p class="text-gray-700 mb-4">Access the **"Site administration"** link from the main Moodle header menu. Only users with the Site Administrator role will see this option.</p>
+                        <div class="h-24 bg-gray-300 rounded-md flex items-center justify-center mt-2">
+                            
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div id="step-2" class="process-step">
+                        <div class="text-sm font-bold text-indigo-600 mb-2">Step 02 / 05</div>
+                        <h4 class="text-xl font-extrabold text-gray-900 mb-3">Manage Courses and Categories</h4>
+                        <p class="text-gray-700 mb-4">From the Site Administration block, click **"Manage courses and categories."** This opens the central course management screen.</p>
+                        <div class="h-24 bg-gray-300 rounded-md flex items-center justify-center mt-2">
+                            
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div id="step-3" class="process-step">
+                        <div class="text-sm font-bold text-indigo-600 mb-2">Step 03 / 05</div>
+                        <h4 class="text-xl font-extrabold text-gray-900 mb-3">Create Course (Select Category First)</h4>
+                        <p class="text-gray-700 mb-4">**Tip:** Before creating a course, decide which category you want it to belong to (e.g., "LEARNING MATERIALS"). Select the appropriate category first, then click **"Create new course."**</p>
+                        <div class="h-24 bg-gray-300 rounded-md flex items-center justify-center mt-2">
+                            
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div id="step-4" class="process-step">
+                        <div class="text-sm font-bold text-indigo-600 mb-2">Step 04 / 05</div>
+                        <h4 class="text-xl font-extrabold text-gray-900 mb-3">Begin Course Settings (General Tab)</h4>
+                        <p class="text-gray-700 mb-4">You will now see the **"Add a new course"** menu. Fill in the **General** settings (Full name, Short name, Course category, etc.) before proceeding.</p>
+                        <div class="h-24 bg-gray-300 rounded-md flex items-center justify-center mt-2">
+                            
+                        </div>
+                    </div>
+                    
+                    <!-- Step 5 -->
+                    <div id="step-5" class="process-step">
+                        <div class="text-sm font-bold text-indigo-600 mb-2">Step 05 / 05</div>
+                        <h4 class="text-xl font-extrabold text-gray-900 mb-3">Review Advanced Course Settings</h4>
+                        <p class="text-gray-700 mb-4">Review the remaining tabs (Description, Course format, Appearance, Files and uploads, Completion tracking, etc.).</p>
+                        <div class="aspect-video bg-gray-300 rounded-lg flex items-center justify-center mt-2 mb-3">
+                            <span class="text-gray-700 font-medium">Video Placeholder: Moodle 4 Course Settings Video (4-minutes)</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">This video provides a walkthrough of the advanced settings you will encounter after saving the basic course details.</p>
+                    </div>
+
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="process-controls flex justify-between items-center pt-4 border-t border-gray-200">
+                    <button id="prev-btn" class="bg-indigo-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-indigo-600 transition" onclick="prevStep()" disabled>
+                        <svg class="w-4 h-4 inline-block align-text-bottom mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        Previous
+                    </button>
+                    <span id="step-counter" class="text-sm font-semibold text-gray-700">1 of 5</span>
+                    <button id="next-btn" class="bg-indigo-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-indigo-600 transition" onclick="nextStep()">
+                        Next
+                        <svg class="w-4 h-4 inline-block align-text-bottom ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            </div>
+            <!-- End Process Container -->
+
+            <!-- ADDITIONAL RESOURCES 2 -->
+            <div class="mt-8 p-6 bg-gray-100 rounded-xl border-l-4 border-cyan-500 shadow-sm">
+                <h4 class="text-xl font-bold text-gray-700 mb-3 border-b border-gray-300 pb-1">Additional Resources</h4>
+                <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4 text-sm">
+                    <li><a href="#" class="text-indigo-600 hover:underline">MoodleDocs: Managing Courses and Categories</a></li>
+                    <li><a href="#" class="text-indigo-600 hover:underline">RIF Academy Guide: Setting Course Enrollment Keys</a></li>
+                    <li><a href="#" class="text-indigo-600 hover:underline">Moodle Video Tutorial: Course Formats (Topics vs. Weekly)</a></li>
+                </ul>
+            </div>
+
+            <!-- KNOWLEDGE CHECK 2 -->
+            <div class="knowledge-check-activity bg-indigo-100 p-6 rounded-xl border-t-4 border-indigo-500 mt-10 shadow-inner">
+                <h4 class="knowledge-check-title text-indigo-800">Knowledge Check: Module 2 Course Creation</h4>
+
+                <!-- Q1: Multiple Choice -->
+                <div class="knowledge-check-item">
+                    <p class="font-semibold text-gray-800 mb-2">1. To create a new course in Moodle, the first administrative screen you must navigate to is:</p>
+                    <div class="space-y-1 text-sm">
+                        <label><input type="radio" name="kc2_q1" value="a"> A) User Profiles</label>
+                        <label><input type="radio" name="kc2_q1" value="b"> B) Site Administration</label>
+                        <label><input type="radio" name="kc2_q1" value="c"> C) Advanced Grading</label>
+                    </div>
+                    <button class="mt-3 bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700" onclick="checkMultipleChoice('kc2_q1', 'b')">Check Answer</button>
+                    <p class="feedback-kc2_q1 text-sm mt-2 font-medium hidden"></p>
+                </div>
+
+                <!-- Q2: Multiple Choice (Testing Activity vs Resource) -->
+                <div class="knowledge-check-item">
+                    <p class="font-semibold text-gray-800 mb-2">2. Which of the following Moodle components is categorized as an **Activity** (requiring interaction or submission)?</p>
+                    <div class="space-y-1 text-sm">
+                        <label><input type="radio" name="kc2_q2" value="a"> A) File Resource</label>
+                        <label><input type="radio" name="kc2_q2" value="b"> B) Book Resource</label>
+                        <label><input type="radio" name="kc2_q2" value="c"> C) Assignment</label>
+                    </div>
+                    <button class="mt-3 bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700" onclick="checkMultipleChoice('kc2_q2', 'c')">Check Answer</button>
+                    <p class="feedback-kc2_q2 text-sm mt-2 font-medium hidden"></p>
+                </div>
+            </div>
+            <a href="#top" class="mt-4 block text-right text-gray-500 text-sm hover:text-gray-700">Back to Top</a>
+        </section>
+
+        <!-- Module 3: Moodle Activities & Resources -->
+        <section id="module-3" class="scroll-mt-custom module-section">
+            <h2 class="text-2xl font-extrabold text-indigo-800 mb-4">3. 🧩 Moodle Activities & Resources</h2>
+            <p class="text-gray-600 mb-6 font-medium">Activities are interactive features (Quizzes, Forums). Resources are static content (Files, Pages).</p>
+
+            <h3 class="text-xl font-bold text-gray-700 mt-6 mb-3 border-b pb-1">Essential Moodle Activities (Click to Flip!)</h3>
+            
+            <!-- Flashcard Grid for Activities -->
+            <div class="grid md:grid-cols-3 gap-4 flashcard-grid mb-8">
+                
+                <!-- Card 1: Assignment -->
+                <div class="flashcard" onclick="flipCard(this)">
+                    <div class="flashcard-face flashcard-front">Assignment</div>
+                    <div class="flashcard-face flashcard-back text-left p-4">
+                        <p class="text-xs text-gray-700">Allows students to submit work (files or online text) for teacher grading. Used for essays, projects, or confirming offline tasks.</p>
+                    </div>
+                </div>
+                <!-- Card 2: Quiz -->
+                <div class="flashcard" onclick="flipCard(this)">
+                    <div class="flashcard-face flashcard-front">Quiz</div>
+                    <div class="flashcard-face flashcard-back text-left p-4">
+                        <p class="text-xs text-gray-700">Flexible activity for automated assessments (MC, True/False, Numerical). Grades are automatically recorded.</p>
+                    </div>
+                </div>
+                <!-- Card 3: Forum -->
+                <div class="flashcard" onclick="flipCard(this)">
+                    <div class="flashcard-face flashcard-front">Forum</div>
+                    <div class="flashcard-face flashcard-back text-left p-4">
+                        <p class="text-xs text-gray-700">Enables asynchronous discussions over time. Used for social space, announcements (News Forum), Q&A, or extension activities.</p>
+                    </div>
+                </div>
+                <!-- Card 4: H5P Activity -->
+                <div class="flashcard" onclick="flipCard(this)">
+                    <div class="flashcard-face flashcard-front">H5P Activity</div>
+                    <div class="flashcard-face flashcard-back text-left p-4">
+                        <p class="text-xs text-gray-700">A content authoring plugin for interactive content (drag-and-drop, interactive video, games) directly within the course.</p>
+                    </div>
+                </div>
+                <!-- Card 5: Lesson -->
+                <div class="flashcard" onclick="flipCard(this)">
+                    <div class="flashcard-face flashcard-front">Lesson</div>
+                    <div class="flashcard-face flashcard-back text-left p-4">
+                        <p class="text-xs text-gray-700">Delivers content with "branching" logic. Directs learners to different pages based on their responses to embedded questions.</p>
+                    </div>
+                </div>
+                <!-- Card 6: Workshop -->
+                <div class="flashcard" onclick="flipCard(this)">
+                    <div class="flashcard-face flashcard-front">Workshop</div>
+                    <div class="flashcard-face flashcard-back text-left p-4">
+                        <p class="text-xs text-gray-700">A peer assessment activity where students submit work, and other students review and grade the submissions based on a teacher-defined criteria.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 class="text-xl font-bold text-gray-700 mt-6 mb-3 border-b pb-1">Essential Moodle Resources</h3>
+            <div class="grid md:grid-cols-2 gap-4">
+                <!-- Book -->
+                <div class="activity-card bg-indigo-50 p-4 rounded-lg shadow-sm">
+                    <h4 class="font-bold text-indigo-700">Book</h4>
+                    <p class="text-sm text-gray-600">A multi-page resource with chapters and subchapters, useful for displaying lengthy information like departmental handbooks or reading material.</p>
+                </div>
+                <!-- Page -->
+                <div class="activity-card bg-indigo-50 p-4 rounded-lg shadow-sm">
+                    <h4 class="font-bold text-indigo-700">Page</h4>
+                    <p class="text-sm text-gray-600">Creates a simple web page resource using the text editor. Better for mobile than a file, ideal for course summaries or embedding multiple videos.</p>
+                </div>
+                <!-- Folder -->
+                <div class="activity-card bg-indigo-50 p-4 rounded-lg shadow-sm">
+                    <h4 class="font-bold text-indigo-700">Folder</h4>
+                    <p class="text-sm text-gray-600">Displays a number of related files inside a single folder, reducing scrolling on the course page (e.g., a set of past exam papers).</p>
+                </div>
+                <!-- URL -->
+                <div class="activity-card bg-indigo-50 p-4 rounded-lg shadow-sm">
+                    <h4 class="font-bold text-indigo-700">URL</h4>
+                    <p class="text-sm text-gray-600">Provides a web link as a course resource. Can link to documents, images, YouTube videos, or external websites.</p>
+                </div>
+            </div>
+            
+            <div class="mt-8 p-4 bg-gray-100 rounded-lg border border-gray-200">
+                <p class="font-semibold text-gray-800">Further Detail:</p>
+                <div class="grid col-span-1 sm:grid-cols-2 gap-3 mt-2 text-sm">
+                    <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium">Video: Assignment in Moodle</a>
+                    <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium">Video: Quiz in Moodle</a>
+                    <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium">Video: Drop and drag files</a>
+                    <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium">Video: Sound and video display</a>
+                </div>
+            </div>
+
+            <!-- ADDITIONAL RESOURCES 3 -->
+            <div class="mt-8 p-6 bg-gray-100 rounded-xl border-l-4 border-cyan-500 shadow-sm">
+                <h4 class="text-xl font-bold text-gray-700 mb-3 border-b border-gray-300 pb-1">Additional Resources</h4>
+                <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4 text-sm">
+                    <li><a href="#" class="text-indigo-600 hover:underline">MoodleDocs: Comprehensive Activity Chooser Guide</a></li>
+                    <li><a href="#" class="text-indigo-600 hover:underline">RIF Academy Guide: Setting up a Group Submission Assignment</a></li>
+                    <li><a href="#" class="text-indigo-600 hover:underline">Video: Building Interactive Content with H5P in Moodle</a></li>
+                </ul>
+            </div>
+
+            <!-- KNOWLEDGE CHECK 3 -->
+            <div class="knowledge-check-activity bg-indigo-100 p-6 rounded-xl border-t-4 border-indigo-500 mt-10 shadow-inner">
+                <h4 class="knowledge-check-title text-indigo-800">Knowledge Check: Module 3 Activities & Resources</h4>
+
+                <!-- Q1: Multiple Choice -->
+                <div class="knowledge-check-item">
+                    <p class="font-semibold text-gray-800 mb-2">1. Which Moodle Resource is generally preferred over uploading a PDF for accessibility on mobile devices and ease of updates?</p>
+                    <div class="space-y-1 text-sm">
+                        <label><input type="radio" name="kc3_q1" value="a"> A) File Resource</label>
+                        <label><input type="radio" name="kc3_q1" value="b"> B) Book Resource</label>
+                        <label><input type="radio" name="kc3_q1" value="c"> C) Page Resource</label>
+                    </div>
+                    <button class="mt-3 bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700" onclick="checkMultipleChoice('kc3_q1', 'c')">Check Answer</button>
+                    <p class="feedback-kc3_q1 text-sm mt-2 font-medium hidden"></p>
+                </div>
+
+                <!-- Q2: True/False -->
+                <div class="knowledge-check-item">
+                    <p class="font-semibold text-gray-800 mb-2">2. True or False: The Workshop activity in Moodle is used only for self-grading assignments by a single student.</p>
+                    <div class="space-x-4 text-sm">
+                        <label><input type="radio" name="kc3_q2" value="true"> True</label>
+                        <label><input type="radio" name="kc3_q2" value="false"> False</label>
+                    </div>
+                    <button class="mt-3 bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700" onclick="checkMultipleChoice('kc3_q2', 'false')">Check Answer</button>
+                    <p class="feedback-kc3_q2 text-sm mt-2 font-medium hidden"></p>
+                </div>
+
+                <!-- Q3: Fill-in-the-Blank -->
+                <div class="knowledge-check-item">
+                    <p class="font-semibold text-gray-800 mb-2">3. The Moodle Activity used to create content with **"branching"** logic based on student responses is the ________ activity.</p>
+                    <input type="text" id="kc3_q3_input" class="w-full border rounded-md p-2 text-sm" placeholder="Type your answer...">
+                    <button class="mt-3 bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700" onclick="checkFillInTheBlank('kc3_q3', ['Lesson'])">Check Answer</button>
+                    <p class="feedback-kc3_q3 text-sm mt-2 font-medium hidden"></p>
+                </div>
+            </div>
+            <a href="#top" class="mt-4 block text-right text-gray-500 text-sm hover:text-gray-700">Back to Top</a>
+        </section>
+
+        <!-- Module 4: Instructor Role and Responsibilities -->
+        <section id="module-4" class="scroll-mt-custom module-section">
+            <h2 class="text-2xl font-extrabold text-indigo-800 mb-4">4. 👤 Instructor Role and Responsibilities</h2>
+            <p class="text-gray-600 mb-6 font-medium">This module outlines the expectations for a RIF Academy instructor after course publishing.</p>
+            
+            <div class="space-y-6">
+                <!-- Managing Learners -->
+                <div class="p-4 bg-gray-50 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Managing Learners and Responding to Feedback</h3>
+                    <div class="h-32 bg-gray-300 rounded-md flex items-center justify-center mb-3">
+                                            </div>
+                    <p class="text-sm text-gray-600">You are responsible for engaging with students, answering questions posted in forums, and providing timely feedback on assignments.</p>
+                </div>
+
+                <!-- Course Quality -->
+                <div class="p-4 bg-gray-50 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Maintaining Course Quality and Updates</h3>
+                    <div class="h-32 bg-gray-300 rounded-md flex items-center justify-center mb-3">
+                        
+                    </div>
+                    <p class="text-sm text-gray-600">Ensure content remains current, links are functional, and the course structure is easy to navigate based on feedback and RIF Academy standards.</p>
+                </div>
+                
+                <!-- Ethical Standards -->
+                <div class="p-4 bg-gray-50 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Ethical and Professional Standards on RIF Academy</h3>
+                    <ul class="list-disc list-inside text-gray-600 ml-4 text-sm">
+                        <li>Academic Integrity</li>
+                        <li>Respectful Communication</li>
+                        <li>Data Privacy & Security</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ADDITIONAL RESOURCES 4 -->
+            <div class="mt-8 p-6 bg-gray-100 rounded-xl border-l-4 border-cyan-500 shadow-sm">
+                <h4 class="text-xl font-bold text-gray-700 mb-3 border-b border-gray-300 pb-1">Additional Resources</h4>
+                <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4 text-sm">
+                    <li><a href="#" class="text-indigo-600 hover:underline">MoodleDocs: The Moodle Gradebook Overview</a></li>
+                    <li><a href="#" class="text-indigo-600 hover:underline">RIF Academy Policy: Learner Communication and Response Time</a></li>
+                    <li><a href="#" class="text-indigo-600 hover:underline">MoodleDocs: Using Enrollment Keys and Self-Registration</a></li>
+                </ul>
+            </div>
+
+            <!-- KNOWLEDGE CHECK 4 -->
+            <div class="knowledge-check-activity bg-indigo-100 p-6 rounded-xl border-t-4 border-indigo-500 mt-10 shadow-inner">
+                <h4 class="knowledge-check-title text-indigo-800">Knowledge Check: Module 4 Instructor Roles</h4>
+
+                <!-- Q1: True/False -->
+                <div class="knowledge-check-item">
+                    <p class="font-semibold text-gray-800 mb-2">1. True or False: The instructor's role typically ends once the course content is initially published.</p>
+                    <div class="space-x-4 text-sm">
+                        <label><input type="radio" name="kc4_q1" value="true"> True</label>
+                        <label><input type="radio" name="kc4_q1" value="false"> False</label>
+                    </div>
+                    <button class="mt-3 bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700" onclick="checkMultipleChoice('kc4_q1', 'false')">Check Answer</button>
+                    <p class="feedback-kc4_q1 text-sm mt-2 font-medium hidden"></p>
+                </div>
+
+                <!-- Q2: Multiple Choice (Ethics) -->
+                <div class="knowledge-check-item">
+                    <p class="font-semibold text-gray-800 mb-2">2. Which of the following is NOT an explicit ethical standard for RIF Academy instructors mentioned in the content?</p>
+                    <div class="space-y-1 text-sm">
+                        <label><input type="radio" name="kc4_q2" value="a"> A) Academic Integrity</label>
+                        <label><input type="radio" name="kc4_q2" value="b"> B) Data Privacy & Security</label>
+                        <label><input type="radio" name="kc4_q2" value="c"> C) Minimum weekly forum post count</label>
+                    </div>
+                    <button class="mt-3 bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700" onclick="checkMultipleChoice('kc4_q2', 'c')">Check Answer</button>
+                    <p class="feedback-kc4_q2 text-sm mt-2 font-medium hidden"></p>
+                </div>
+            </div>
+            <a href="#top" class="mt-4 block text-right text-gray-500 text-sm hover:text-gray-700">Back to Top</a>
+        </section>
+
+        <!-- Module 5: ADDIE Model (New Module) -->
+        <section id="module-5" class="scroll-mt-custom module-section">
+            <h2 class="text-2xl font-extrabold text-cyan-800 mb-4">5. 📐 ID Strategy: The ADDIE Model</h2>
+            <p class="text-gray-600 mb-6 font-medium">The **ADDIE Model (Analysis, Design, Development, Implementation, Evaluation)** is a five-phase framework used to manage and standardize the creation of training materials across RIF Academy. It ensures all courses are effective, measurable, and meet specific learning needs.</p>
+            
+            <div class="space-y-8">
+                
+                <!-- The ADDIE Overview Graphic -->
+                <div class="p-4 bg-cyan-50 rounded-lg shadow-md flex justify-center mb-6">
+                    <div class="w-full max-w-lg h-40 bg-gray-300 rounded-lg flex items-center justify-center">
+                                            </div>
+                </div>
+
+                <!-- Lesson 5.1: The Design Phase (Content Blueprint) -->
+                <div class="p-4 bg-cyan-50 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-3 border-b border-cyan-300 pb-1">5.1 Focus: The Design Phase (Content Blueprint)</h3>
+                    <p class="text-sm text-gray-700 mb-3">The Design phase translates the goals identified in Analysis into a concrete blueprint. This is where you decide *how* the Moodle tools (Activities & Resources) will be used.</p>
+                    
+                    <div class="addie-point p-3 bg-white rounded-lg border border-cyan-200 mb-3">
+                        <p class="font-semibold text-gray-800">1. Define Learning Objectives (Goal Setting)</p>
+                        <p class="text-sm text-gray-600 ml-4 mt-1">Start by defining clear, measurable, and concise objectives (Tip 2). These objectives directly guide your selection of Moodle activities and assessment strategies.</p>
+                    </div>
+                    
+                    <div class="addie-point p-3 bg-white rounded-lg border border-cyan-200 mb-3">
+                        <p class="font-semibold text-gray-800">2. Sequence the Content and Activities (Flow)</p>
+                        <p class="text-sm text-gray-600 ml-4 mt-1">Choose an appropriate content sequence (Chronological, Topical, Known-to-Unknown, etc.) (Tip 3). Map out where Moodle **Pages** introduce concepts and where **Quizzes/Assignments** apply them.</p>
+                        <div class="h-10 bg-gray-300 rounded-md flex items-center justify-center mt-2">
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="addie-point p-3 bg-white rounded-lg border border-cyan-200 mb-3">
+                        <p class="font-semibold text-gray-800">3. Create the Course Storyboard (Moodle Mapping)</p>
+                        <p class="text-sm text-gray-600 ml-4 mt-1">Map out the contents of every section (Module/Topic). Define the type of Moodle Activity (Forum, Assignment, H5P) and the media type (video, text, image) for each lesson. Review this blueprint critically to ensure a variety of activities is included (Tip 14).</p>
+                    </div>
+                    
+                    <div class="addie-point p-3 bg-white rounded-lg border border-cyan-200 mb-3">
+                        <p class="font-semibold text-gray-800">4. Determine Assessment Strategy</p>
+                        <p class="text-sm text-gray-600 ml-4 mt-1">Decide whether to use Moodle's built-in tools (Quiz, Workshop) or external tools for scoring. If using the **Assignment** activity, plan to use a **Rubric** for transparent, multi-criteria assessment.</p>
+                    </div>
+
+                    <h4 class="text-lg font-bold text-gray-700 mt-6 mb-3 border-b border-cyan-300 pb-1">Practical Example: Gender Equity Awareness Blueprint</h4>
+                    
+                    <!-- Content Blueprint Table (Embedded from content_blueprint_example.md) -->
+                    <div class="overflow-x-auto bg-white p-4 rounded-lg shadow-inner">
+                        <h5 class="text-base font-bold text-gray-800 mb-2">Content Blueprint: Gender Equity Awareness for Microfinance Staff</h5>
+                        <p class="xs text-gray-600 mb-3">**Course Goal:** Equip microfinance staff with foundational awareness and tools to recognize and address gender biases.</p>
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Module</th>
+                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Objective</th>
+                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sequencing</th>
+                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Moodle Tool</th>
+                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Media</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200 text-sm">
+                                <tr>
+                                    <td class="px-3 py-2 font-semibold">1. Foundations</td>
+                                    <td class="px-3 py-2">Define key gender equity terms.</td>
+                                    <td class="px-3 py-2">Known-to-Unknown</td>
+                                    <td class="px-3 py-2">Resource: Page</td>
+                                    <td class="px-3 py-2">Title slide, text definition, and ****.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 font-semibold">2. Unconscious Bias</td>
+                                    <td class="px-3 py-2">Identify at least three common unconscious biases impacting loan decisions.</td>
+                                    <td class="px-3 py-2">Whole-to-Part</td>
+                                    <td class="px-3 py-2">Activity: H5P (Interactive Video/Quiz)</td>
+                                    <td class="px-3 py-2">**Video:** Demonstration of a biased loan interview. **Activity:** Embedded H5P Knowledge Check (3 questions).</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 font-semibold">3. Equitable Service</td>
+                                    <td class="px-3 py-2">Learn how to adjust client interaction process to be gender-sensitive.</td>
+                                    <td class="px-3 py-2">Procedural/Step-by-Step</td>
+                                    <td class="px-3 py-2">Resource: Book</td>
+                                    <td class="px-3 py-2">**Book:** Chapter 1: Outreach & Marketing (Text & Images). Chapter 2: Client Assessment (Checklist). ****</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 font-semibold">4. Action & Commitment</td>
+                                    <td class="px-3 py-2">Commit to one specific action to improve gender equity within their branch or role.</td>
+                                    <td class="px-3 py-2">General-to-Specific</td>
+                                    <td class="px-3 py-2">Activity: Assignment</td>
+                                    <td class="px-3 py-2">**Assignment:** Online Text submission. Prompt: "What specific action will you implement... (Tip 41 - End-of-Course Experience)."</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2 font-semibold">5. Wrap-Up & Feedback</td>
+                                    <td class="px-3 py-2">Recall key learnings and provide anonymous course feedback.</td>
+                                    <td class="px-3 py-2">Concluding</td>
+                                    <td class="px-3 py-2">Activity: Quiz + Feedback</td>
+                                    <td class="px-3 py-2">**Quiz:** 3 Multiple Choice questions. **Feedback:** Moodle Feedback activity.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h5 class="text-base font-bold text-gray-800 mt-6 mb-2">Assessment Strategy</h5>
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assessment</th>
+                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Moodle Tool</th>
+                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grading Method</th>
+                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Required?</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200 text-sm">
+                                <tr>
+                                    <td class="px-3 py-2">Bias Check</td>
+                                    <td class="px-3 py-2">H5P Embedded Quiz (Module 2)</td>
+                                    <td class="px-3 py-2">Automatic Score</td>
+                                    <td class="px-3 py-2 font-semibold text-green-600">Yes (Must pass 80%)</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2">Action Commitment</td>
+                                    <td class="px-3 py-2">Assignment (Module 4)</td>
+                                    <td class="px-3 py-2">Simple Direct Grading (Pass/Fail)</td>
+                                    <td class="px-3 py-2">Simple Direct Grading (Pass/Fail)</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-3 py-2">Final Awareness Quiz</td>
+                                    <td class="px-3 py-2">Quiz (Module 5)</td>
+                                    <td class="px-3 py-2">Automatic Score</td>
+                                    <td class="px-3 py-2 font-semibold text-green-600">Yes (Must achieve 70% overall course grade)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- End Content Blueprint Table -->
+
+                </div>
+            </div>
+
+            <!-- ADDITIONAL RESOURCES 5 -->
+            <div class="mt-8 p-6 bg-gray-100 rounded-xl border-l-4 border-cyan-500 shadow-sm">
+                <h4 class="text-xl font-bold text-gray-700 mb-3 border-b border-gray-300 pb-1">Additional Resources</h4>
+                <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4 text-sm">
+                    <li><a href="#" class="text-indigo-600 hover:underline">MoodleDocs: Using Rubrics and Advanced Grading</a></li>
+                    <li><a href="#" class="text-indigo-600 hover:underline">RIF Academy Template: Course Design Document (CDD)</a></li>
+                    <li><a href="#" class="text-indigo-600 hover:underline">External Article: Applying ADDIE to Microfinance Training</a></li>
+                </ul>
+            </div>
+
+            <!-- KNOWLEDGE CHECK 5 -->
+            <div class="knowledge-check-activity bg-cyan-100 p-6 rounded-xl border-t-4 border-cyan-500 mt-10 shadow-inner">
+                <h4 class="knowledge-check-title text-cyan-800">Knowledge Check: Module 5 ADDIE Model</h4>
+
+                <!-- Q1: Multiple Choice -->
+                <div class="knowledge-check-item">
+                    <p class="font-semibold text-gray-800 mb-2">1. In the ADDIE model, creating the **Content Blueprint** occurs during which phase?</p>
+                    <div class="space-y-1 text-sm">
+                        <label><input type="radio" name="kc5_q1" value="a"> A) Analysis</label>
+                        <label><input type="radio" name="kc5_q1" value="b"> B) Design</label>
+                        <label><input type="radio" name="kc5_q1" value="c"> C) Development</label>
+                    </div>
+                    <button class="mt-3 bg-cyan-600 text-white px-3 py-1 rounded-md hover:bg-cyan-700" onclick="checkMultipleChoice('kc5_q1', 'b')">Check Answer</button>
+                    <p class="feedback-kc5_q1 text-sm mt-2 font-medium hidden"></p>
+                </div>
+
+                <!-- Q2: True/False -->
+                <div class="knowledge-check-item">
+                    <p class="font-semibold text-gray-800 mb-2">2. True or False: When sequencing content, the "Known-to-Unknown" approach is only suitable for advanced learners.</p>
+                    <div class="space-x-4 text-sm">
+                        <label><input type="radio" name="kc5_q2" value="true"> True</label>
+                        <label><input type="radio" name="kc5_q2" value="false"> False</label>
+                    </div>
+                    <button class="mt-3 bg-cyan-600 text-white px-3 py-1 rounded-md hover:bg-cyan-700" onclick="checkMultipleChoice('kc5_q2', 'false')">Check Answer</button>
+                    <p class="feedback-kc5_q2 text-sm mt-2 font-medium hidden"></p>
+                </div>
+            </div>
+            <a href="#top" class="mt-4 block text-right text-gray-500 text-sm hover:text-gray-700">Back to Top</a>
+        </section>
+
+        <!-- Module 6: Instructional Design & Engagement -->
+        <section id="module-6" class="scroll-mt-custom module-section">
+            <h2 class="text-2xl font-extrabold text-green-800 mb-4">6. 💡 Engagement and Retention Techniques</h2>
+            <p class="text-gray-600 mb-6 font-medium">This module introduces essential pedagogical and design techniques to maximize learner retention and participation in your Moodle courses.</p>
+            
+            <div class="space-y-4">
+                
+                <!-- Expandable Section 6.1 -->
+                <div class="accordion-item rounded-lg shadow-md bg-green-50 border-t-4 border-green-500">
+                    <button class="accordion-header flex justify-between items-center w-full p-4 font-extrabold text-xl text-green-800 hover:bg-green-100 transition duration-150" onclick="toggleLesson('lesson-6-1')">
+                        <span>6.1 Conversational Style and Learning Pacing</span>
+                        <span class="accordion-icon text-green-700 text-2xl font-bold">×</span>
+                    </button>
+                    <div id="lesson-6-1" class="accordion-content p-0 active space-y-4">
+                        <div class="p-4 space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3 border-b border-green-300 pb-1">Conversational & Pacing Strategies</h3>
+                            <p class="text-sm text-gray-700">Effective pacing and conversational language are vital for maintaining focus in an online environment.</p>
+                            
+                            <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
+                                <p class="font-semibold text-gray-800">Use Conversational Tone (Tip 16)</p>
+                                <p class="text-sm text-gray-600 ml-4 mt-1">Address learners directly using "you" and "I" (first-person language). Research shows students work harder when they feel they are in a conversation.</p>
+                            </div>
+                            
+                            <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
+                                <p class="font-semibold text-gray-800">Master the 90-20-8 Rule (Tip 20)</p>
+                                <p class="text-sm text-gray-600 ml-4 mt-1">Keep lessons under 90 minutes. Change the pace or method every **20 minutes**. Involve the learner in an activity (poll, quiz, discussion) every **8 minutes** to ensure active participation.</p>
+                                <div class="h-10 bg-gray-300 rounded-md flex items-center justify-center mt-2">
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
+                                <p class="font-semibold text-gray-800">Set the Tone with Icebreakers (Tip 18)</p>
+                                <p class="text-sm text-gray-600 ml-4 mt-1">Use the Moodle **Forum** activity for a lighthearted, non-academic icebreaker at the start of the course to foster a friendly atmosphere and build community.</p>
+                                <div class="h-10 bg-gray-300 rounded-md flex items-center justify-center mt-2">
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
+                                <p class="font-semibold text-gray-800">Use Humor (Tip 17) & Reminders (Tip 19)</p>
+                                <p class="text-sm text-gray-600 ml-4 mt-1">Incorporate humor (memes, funny examples) to reduce stress. Use Moodle's Announcement or Email features to provide a clear "to-do list" and remind students of upcoming priorities.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Expandable Section 6.2 -->
+                <div class="accordion-item rounded-lg shadow-md bg-green-50 border-t-4 border-green-500">
+                    <button class="accordion-header flex justify-between items-center w-full p-4 font-extrabold text-xl text-green-800 hover:bg-green-100 transition duration-150" onclick="toggleLesson('lesson-6-2')">
+                        <span>6.2 Structuring Content for Deep Retention</span>
+                        <span class="accordion-icon text-green-700 text-2xl font-bold">+</span>
+                    </button>
+                    <div id="lesson-6-2" class="accordion-content p-0 space-y-4">
+                        <div class="p-4 space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3 border-b border-green-300 pb-1">Content for Retention (Storytelling & Practice)</h3>
+                            <p class="text-sm text-gray-700">Focus your energy on complexity and use active learning techniques to ensure knowledge application.</p>
+                            
+                            <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
+                                <p class="font-semibold text-gray-800">Apply the 80/20 Rule to Complexity (Tip 7)</p>
+                                <p class="text-sm text-gray-600 ml-4 mt-1">Identify the 20% of concepts that require 80% of the effort. Dedicate more content, examples, and Moodle quiz attempts to these complex topics.</p>
+                                <div class="h-10 bg-gray-300 rounded-md flex items-center justify-center mt-2">
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
+                                <p class="font-semibold text-gray-800">Provide Worked Out Examples (Tip 31)</p>
+                                <p class="text-sm text-gray-600 ml-4 mt-1">Provide detailed, step-by-step explanations for novice learners. As they advance, make explanations shorter and available only on-demand (e.g., using a hidden Moodle **Page** resource).</p>
+                            </div>
+                            
+                            <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
+                                <p class="font-semibold text-gray-800">Use Stories and Case Studies (Tips 30, 38)</p>
+                                <p class="text-sm text-gray-600 ml-4 mt-1">Use the Moodle **Assignment** or **Database** activity to present real-life **Case Studies** that develop critical analysis and decision-making skills.</p>
+                                <div class="h-10 bg-gray-300 rounded-md flex items-center justify-center mt-2">
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
+                                <p class="font-semibold text-gray-800">Design Authentic Activities (Tip 43) & Promote Practice (Tip 36)</p>
+                                <p class="text-sm text-gray-600 ml-4 mt-1">Ensure activities require learners to apply knowledge in a meaningful way that has value beyond the course. Use Moodle **Workshop** (for peer review) or **Assignment** activities frequently for demonstration of skill improvement.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Expandable Section 6.3 -->
+                <div class="accordion-item rounded-lg shadow-md bg-green-50 border-t-4 border-green-500">
+                    <button class="accordion-header flex justify-between items-center w-full p-4 font-extrabold text-xl text-green-800 hover:bg-green-100 transition duration-150" onclick="toggleLesson('lesson-6-3')">
+                        <span>6.3 Visual Design and Continuous Feedback</span>
+                        <span class="accordion-icon text-green-700 text-2xl font-bold">+</span>
+                    </button>
+                    <div id="lesson-6-3" class="accordion-content p-0 space-y-4">
+                        <div class="p-4 space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3 border-b border-green-300 pb-1">Visual Design & Feedback Loop</h3>
+                            <p class="text-sm text-gray-700">The visual elements and feedback mechanisms on Moodle directly impact focus and course quality.</p>
+                            
+                            <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
+                                <p class="font-semibold text-gray-800">Prioritize Distraction-Free Design (Tip 21)</p>
+                                <p class="text-sm text-gray-600 ml-4 mt-1">Stick to a clean, simple Moodle theme. Remove all unnecessary side-blocks, graphics, and elements that do not directly support the learning goal (weeding).</p>
+                                <div class="h-10 bg-gray-300 rounded-md flex items-center justify-center mt-2">
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
+                                <p class="font-semibold text-gray-800">Use Meaningful Images (Tip 22) & Consistent Color (Tips 24, 25)</p>
+                                <p class="text-sm text-gray-600 ml-4 mt-1">Prefer photos over clip art. Select powerful images that evoke positive emotions for better retention. When using Moodle's Text and Media areas, use a consistent color palette (2-3 colors max) for visual simplicity.</p>
+                                <div class="h-10 bg-gray-300 rounded-md flex items-center justify-center mt-2">
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
+                                <p class="font-semibold text-gray-800">Encourage Motivation (Tip 46) & Feedback (Tip 12)</p>
+                                <p class="text-sm text-gray-600 ml-4 mt-1">Use Moodle's **Badges** or **Certificates** for extrinsic motivation. Gather **mid-course** feedback (using the Moodle **Feedback** activity) to adjust content and demonstrate responsiveness to learners.</p>
+                            </div>
+                            
+                            <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
+                                <p class="font-semibold text-gray-800">Create the End-of-Course Experience (Tip 41)</p>
+                                <p class="text-sm text-gray-600 ml-4 mt-1">Help learners recall the most essential concepts by asking a final reflection question, such as: "If you remember nothing else, remember **THIS** concept."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <!-- ADDITIONAL RESOURCES 6 -->
+            <div class="mt-8 p-6 bg-gray-100 rounded-xl border-l-4 border-cyan-500 shadow-sm">
+                <h4 class="text-xl font-bold text-gray-700 mb-3 border-b border-gray-300 pb-1">Additional Resources</h4>
+                <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4 text-sm">
+                    <li><a href="#" class="text-indigo-600 hover:underline">RIF Academy Guide: Best Practices for Video Production</a></li>
+                    <li><a href="#" class="text-indigo-600 hover:underline">External Article: The Science Behind the 90-20-8 Rule</a></li>
+                    <li><a href="#" class="text-indigo-600 hover:underline">Tool Guide: Creating Free Stock Images and Graphics</a></li>
+                </ul>
+            </div>
+
+            <!-- KNOWLEDGE CHECK 6 -->
+            <div class="knowledge-check-activity bg-green-100 p-6 rounded-xl border-t-4 border-green-500 mt-10 shadow-inner">
+                <h4 class="knowledge-check-title text-green-800">Knowledge Check: Module 6 Engagement Techniques</h4>
+
+                <!-- Q1: Multiple Choice (90-20-8 Rule) -->
+                <div class="knowledge-check-item">
+                    <p class="font-semibold text-gray-800 mb-2">1. According to the 90-20-8 rule, how often should a learner be involved in an activity?</p>
+                    <div class="space-y-1 text-sm">
+                        <label><input type="radio" name="kc6_q1" value="a"> A) Every 90 minutes</label>
+                        <label><input type="radio" name="kc6_q1" value="b"> B) Every 20 minutes</label>
+                        <label><input type="radio" name="kc6_q1" value="c"> C) Every 8 minutes</label>
+                    </div>
+                    <button class="mt-3 bg-green-600 text-white px-3 py-1 rounded-md hover:bg-green-700" onclick="checkMultipleChoice('kc6_q1', 'c')">Check Answer</button>
+                    <p class="feedback-kc6_q1 text-sm mt-2 font-medium hidden"></p>
+                </div>
+
+                <!-- Q2: Fill-in-the-Blank -->
+                <div class="knowledge-check-item">
+                    <p class="font-semibold text-gray-800 mb-2">2. To reduce cognitive overload, a design technique called ________ is recommended, where unnecessary words or graphics are removed.</p>
+                    <input type="text" id="kc6_q2_input" class="w-full border rounded-md p-2 text-sm" placeholder="Type your answer...">
+                    <button class="mt-3 bg-green-600 text-white px-3 py-1 rounded-md hover:bg-green-700" onclick="checkFillInTheBlank('kc6_q2', ['weeding', 'weed'])">Check Answer</button>
+                    <p class="feedback-kc6_q2 text-sm mt-2 font-medium hidden"></p>
+                </div>
+            </div>
+            <a href="#top" class="mt-4 block text-right text-gray-500 text-sm hover:text-gray-700">Back to Top</a>
+        </section>
+        
+        <!-- Module 7: Course Accessibility (NEW MODULE) -->
+        <section id="module-7" class="scroll-mt-custom module-section">
+            <h2 class="text-2xl font-extrabold text-red-800 mb-4">7. ♿ Course Accessibility: Enhancing Readability</h2>
+            <p class="text-gray-600 mb-6 font-medium">Ensuring your Moodle course content is accessible is mandatory. This includes designing for keyboard navigation, screen readers, and learners with cognitive needs. This module focuses on the **Reading Mode** feature to enhance readability for text-heavy resources.</p>
+            
+            <div class="space-y-8">
+                
+                <div class="p-4 bg-red-50 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-3 border-b border-red-300 pb-1">7.1 Understanding Reading Mode</h3>
+                    <p class="text-sm text-gray-700 mb-3">Reading Mode globally changes the aesthetic properties of the page to prioritize text clarity over design complexity. This is especially useful for consuming large amounts of text (e.g., Moodle **Page** or **Book** resources).</p>
+                    
+                    <div class="lesson-point p-3 bg-white rounded-lg border border-red-200 mb-3">
+                        <p class="font-semibold text-gray-800">High-Contrast Palette</p>
+                        <p class="text-sm text-gray-600 ml-4 mt-1">Switches the background to a soft cream/yellow color and the text to true black, which reduces screen glare and improves focus compared to stark white backgrounds.</p>
+                    </div>
+                    
+                    <div class="lesson-point p-3 bg-white rounded-lg border border-red-200 mb-3">
+                        <p class="font-semibold text-gray-800">Enhanced Typography</p>
+                        <p class="text-sm text-gray-600 ml-4 mt-1">The font switches to a serif typeface with increased size and line spacing, making long passages easier to track and read (a key recommendation from accessibility experts).</p>
+                    </div>
+                    
+                    <div class="lesson-point p-3 bg-white rounded-lg border border-red-200 mb-3">
+                        <p class="font-semibold text-gray-800">Usage:</p>
+                        <p class="text-sm text-gray-600 ml-4 mt-1">To activate this mode, click the **"Aa"** button next to the main menu toggle. Encourage learners to use it when reading text-heavy materials.</p>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-red-50 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-3 border-b border-red-300 pb-1">7.2 Moodle Content Design for Accessibility</h3>
+                    <p class="text-sm text-gray-700 mb-3">Beyond reading mode, remember to format content correctly within Moodle:</p>
+                    
+                    <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4 text-sm">
+                        <li>**Use Moodle's built-in heading styles** (Heading 2, 3, 4) in the text editor for proper screen reader navigation.</li>
+                        <li>**Provide Alt Text** for all images you upload (Tip 22).</li>
+                        <li>**Ensure all videos include captions** (Moodle supports this via video embed options).</li>
+                    </ul>
+                    <div class="h-10 bg-gray-300 rounded-md flex items-center justify-center mt-2">
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADDITIONAL RESOURCES 7 -->
+            <div class="mt-8 p-6 bg-gray-100 rounded-xl border-l-4 border-red-500 shadow-sm">
+                <h4 class="text-xl font-bold text-gray-700 mb-3 border-b border-gray-300 pb-1">Additional Resources</h4>
+                <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4 text-sm">
+                    <li><a href="#" class="text-indigo-600 hover:underline">MoodleDocs: Accessibility Best Practices</a></li>
+                    <li><a href="#" class="text-indigo-600 hover:underline">Web Content Accessibility Guidelines (WCAG) Quick Reference</a></li>
+                    <li><a href="#" class="text-indigo-600 hover:underline">RIF Academy Checklist: Accessible Content Creation</a></li>
+                </ul>
+            </div>
+
+            <!-- KNOWLEDGE CHECK 7 -->
+            <div class="knowledge-check-activity bg-red-100 p-6 rounded-xl border-t-4 border-red-500 mt-10 shadow-inner">
+                <h4 class="knowledge-check-title text-red-800">Knowledge Check: Module 7 Accessibility</h4>
+
+                <!-- Q1: True/False -->
+                <div class="knowledge-check-item">
+                    <p class="font-semibold text-gray-800 mb-2">1. True or False: Providing Alt Text for images is a low-priority task in course accessibility, as screen readers can usually interpret the image context automatically.</p>
+                    <div class="space-x-4 text-sm">
+                        <label><input type="radio" name="kc7_q1" value="true"> True</label>
+                        <label><input type="radio" name="kc7_q1" value="false"> False</label>
+                    </div>
+                    <button class="mt-3 bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700" onclick="checkMultipleChoice('kc7_q1', 'false')">Check Answer</button>
+                    <p class="feedback-kc7_q1 text-sm mt-2 font-medium hidden"></p>
+                </div>
+
+                <!-- Q2: Multiple Choice (Reading Mode Typography) -->
+                <div class="knowledge-check-item">
+                    <p class="font-semibold text-gray-800 mb-2">2. Reading Mode enhances readability by changing the primary font to which style, which aids in tracking long text passages?</p>
+                    <div class="space-y-1 text-sm">
+                        <label><input type="radio" name="kc7_q2" value="a"> A) Sans-Serif</label>
+                        <label><input type="radio" name="kc7_q2" value="b"> B) Serif</label>
+                        <label><input type="radio" name="kc7_q2" value="c"> C) Monospace</label>
+                    </div>
+                    <button class="mt-3 bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700" onclick="checkMultipleChoice('kc7_q2', 'b')">Check Answer</button>
+                    <p class="feedback-kc7_q2 text-sm mt-2 font-medium hidden"></p>
+                </div>
+            </div>
+            <a href="#top" class="mt-4 block text-right text-gray-500 text-sm hover:text-gray-700">Back to Top</a>
+        </section>
+
+        <!-- Module 8: SCORM Explained (NEW MODULE) -->
+        <section id="module-8" class="scroll-mt-custom module-section">
+            <h2 class="text-2xl font-extrabold text-indigo-800 mb-4">8. 📦 SCORM Explained</h2>
+            <p class="text-gray-600 mb-6 font-medium">SCORM (Sharable Content Object Reference Model) is a set of technical standards that allows eLearning content to be shared across different Learning Management Systems (LMS). It ensures compatibility and progress tracking for highly interactive, externally built content.</p>
+            
+            <div class="space-y-6">
+                <!-- SCORM Definition -->
+                <div class="p-4 bg-indigo-50 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">What is a SCORM Package?</h3>
+                    <p class="text-sm text-gray-600">A SCORM package is a collection of files (usually packaged as a ZIP file) created by authoring tools (like Articulate Storyline or Adobe Captivate). It acts as a common language that Moodle understands, allowing interactive multimedia content and assessments to be uploaded and tracked.</p>
+                    <div class="h-20 bg-gray-300 rounded-md flex items-center justify-center mt-3">
+                        
+                    </div>
+                </div>
+
+                <!-- Use Cases -->
+                <div class="p-4 bg-indigo-50 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">When to use the SCORM Activity in Moodle</h3>
+                    <ul class="list-disc list-inside text-gray-600 ml-4 text-sm space-y-1">
+                        <li>**Interactive Multimedia:** For presenting complex animations, simulations, or scenarios created outside of Moodle's native editor.</li>
+                        <li>**Automated Assessment:** When content includes detailed, scored questions that must be tracked automatically (SCORM reports the score directly to the Moodle Gradebook).</li>
+                        <li>**Interoperability:** If you need to reuse content created for another LMS platform.</li>
+                    </ul>
+                </div>
+
+                <!-- SCORM UPLOAD PROCESS -->
+                <div class="p-4 bg-indigo-50 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-3 border-b border-indigo-300 pb-1">Procedure: Uploading Rise 360 SCORM to Moodle</h3>
+                    
+                    <p class="text-sm text-gray-600 mb-4">Follow these steps in Moodle to deploy your Rise 360 output ZIP file:</p>
+
+                    <!-- VIDEO PLACEHOLDER FOR SCORM UPLOAD -->
+                    <div class="aspect-video bg-gray-300 rounded-lg flex items-center justify-center mb-4">
+                        <span class="text-gray-700 font-medium text-lg">Video Placeholder: How to upload a SCORM package in Moodle Activity</span>
+                    </div>
+
+                    <div class="process-container space-y-4">
+                        <div class="lesson-point p-3 bg-white rounded-lg border border-indigo-200 mb-3">
+                            <p class="font-semibold text-gray-800">Step 1: Locate SCORM Activity</p>
+                            <p class="text-xs text-gray-600 mt-1">In your Moodle course, click **"Turn editing on"**, then **"Add an activity or resource,"** and select **"SCORM package."**</p>
+                        </div>
+                        <div class="lesson-point p-3 bg-white rounded-lg border border-indigo-200 mb-3">
+                            <p class="font-semibold text-gray-800">Step 2: Upload ZIP File</p>
+                            <p class="text-xs text-gray-600 mt-1">Under the **"Package"** section, drag and drop the **Rise 360 output ZIP file** into the designated file area.</p>
+                            <div class="h-10 bg-gray-300 rounded-md flex items-center justify-center mt-2">
+                                
+                            </div>
+                        </div>
+                        <div class="lesson-point p-3 bg-white rounded-lg border border-indigo-200 mb-3">
+                            <p class="font-semibold text-gray-800">Step 3: Configure Appearance (Optional)</p>
+                            <p class="text-xs text-gray-600 mt-1">Under **"Appearance,"** choose how the content displays (e.g., **New window** or **Current window**). This affects the user experience.</p>
+                        </div>
+                        <div class="lesson-point p-3 bg-white rounded-lg border border-indigo-200 mb-3">
+                            <p class="font-semibold text-gray-800">Step 4: Configure Grade (Important)</p>
+                            <p class="text-xs text-gray-600 mt-1">Under **"Grade,"** verify the maximum grade, grading method, and ensure the score is passed correctly from the SCORM package to the Moodle Gradebook.</p>
+                            <div class="h-10 bg-gray-300 rounded-md flex items-center justify-center mt-2">
+                                
+                            </div>
+                        </div>
+                        <div class="lesson-point p-3 bg-white rounded-lg border border-indigo-200 mb-3">
+                            <p class="font-semibold text-gray-800">Step 5: Save and Display</p>
+                            <p class="text-xs text-gray-600 mt-1">Click **"Save and display."** Moodle will launch the package, allowing you to test the scoring and navigation.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SCORM vs H5P -->
+                <div class="p-4 bg-indigo-50 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">SCORM vs. H5P (Important Distinction)</h3>
+                    <p class="text-sm text-gray-600">While both create interactive content:</p>
+                    <ul class="list-disc list-inside text-gray-600 ml-4 text-sm space-y-1">
+                        <li>**SCORM** requires external authoring software and is uploaded as a ZIP file. It is the industry standard for formal tracking.</li>
+                        <li>**H5P** is a Moodle plugin that allows you to build interactive content directly inside Moodle using your browser. It's simpler for quick, native interactions.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ADDITIONAL RESOURCES 8 -->
+            <div class="mt-8 p-6 bg-gray-100 rounded-xl border-l-4 border-cyan-500 shadow-sm">
+                <h4 class="text-xl font-bold text-gray-700 mb-3 border-b border-gray-300 pb-1">Additional Resources</h4>
+                <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4 text-sm">
+                    <li><a href="#" class="text-indigo-600 hover:underline">MoodleDocs: Using the SCORM Activity Module</a></li>
+                    <li><a href="#" class="text-indigo-600 hover:underline">Video Tutorial: Exporting Content to SCORM from Articulate Rise</a></li>
+                    <li><a href="#" class="text-indigo-600 hover:underline">External Guide: SCORM vs. Tin Can API (xAPI)</a></li>
+                </ul>
+            </div>
+
+            <!-- KNOWLEDGE CHECK 8 -->
+            <div class="knowledge-check-activity bg-indigo-100 p-6 rounded-xl border-t-4 border-indigo-500 mt-10 shadow-inner">
+                <h4 class="knowledge-check-title text-indigo-800">Knowledge Check: Module 8 SCORM Explained</h4>
+
+                <!-- Q1: Multiple Choice -->
+                <div class="knowledge-check-item">
+                    <p class="font-semibold text-gray-800 mb-2">1. What is the primary advantage of using a SCORM package over simply embedding a Moodle Page resource?</p>
+                    <div class="space-y-1 text-sm">
+                        <label><input type="radio" name="kc8_q1" value="a"> A) SCORM content loads faster on mobile devices.</label>
+                        <label><input type="radio" name="kc8_q1" value="b"> B) SCORM content tracks detailed quiz results and status directly to the Gradebook.</label>
+                        <label><input type="radio" name="kc8_q1" value="c"> C) SCORM allows the instructor to edit content directly in the Moodle text editor.</label>
+                    </div>
+                    <button class="mt-3 bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700" onclick="checkMultipleChoice('kc8_q1', 'b')">Check Answer</button>
+                    <p class="feedback-kc8_q1 text-sm mt-2 font-medium hidden"></p>
+                </div>
+
+                <!-- Q2: True/False -->
+                <div class="knowledge-check-item">
+                    <p class="font-semibold text-gray-800 mb-2">2. True or False: H5P is generally used for highly complex, externally authored simulations, while SCORM is for simpler, native Moodle interactions.</p>
+                    <div class="space-x-4 text-sm">
+                        <label><input type="radio" name="kc8_q2" value="true"> True</label>
+                        <label><input type="radio" name="kc8_q2" value="false"> False</label>
+                    </div>
+                    <button class="mt-3 bg-indigo-600 text-white px-3 py-1 rounded-md hover:bg-indigo-700" onclick="checkMultipleChoice('kc8_q2', 'false')">Check Answer</button>
+                    <p class="feedback-kc8_q2 text-sm mt-2 font-medium hidden"></p>
+                </div>
+            </div>
+            <a href="#top" class="mt-4 block text-right text-gray-500 text-sm hover:text-gray-700">Back to Top</a>
+        </section>
+
+
+        <!-- Footer -->
+        <footer class="text-center py-6 text-sm text-gray-500 border-t mt-12">
+            Moodle Course Creator Workshop &copy; 2025. Content based on RIF Academy materials.
+        </footer>
+    </div>
+    
+    <!-- Combined JavaScript (scripts.js content here) -->
+    <script>
+        // --- DOM ELEMENTS ---
+        const sidebar = document.getElementById('sidebar');
+        const contentWrapper = document.getElementById('content-wrapper');
+        const fixedControls = document.getElementById('fixed-controls');
+        let currentStep = 1; // Used for Module 2 Process Block
+        const totalSteps = 5;
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Initialize desktop/mobile layout state
+            // Re-run this logic on resize to correct state if window size changes
+            if (window.innerWidth >= 768) {
+                // Desktop: Ensure sidebar starts open (remove classes if present)
+                sidebar.classList.remove('hidden-sidebar');
+                contentWrapper.classList.remove('full-width');
+                fixedControls.classList.remove('full-width');
+            } else {
+                // Mobile: Ensure sidebar starts hidden (remove classes if present)
+                sidebar.classList.remove('active-mobile');
+            }
+
+            // 2. Initialize Module 2 Process Block
+            updateProcessDisplay();
+
+            // 3. Initialize Module 6 Accordion state
+            const lesson61 = document.getElementById('lesson-6-1');
+            if (lesson61) {
+                const header61 = lesson61.previousElementSibling;
+                if (lesson61.classList.contains('active')) {
+                    header61.querySelector('.accordion-icon').innerHTML = '×';
+                    header61.classList.add('active');
+                } else {
+                    header61.querySelector('.accordion-icon').innerHTML = '+';
+                    header61.classList.remove('active');
+                }
+            }
+            
+            // 4. Initialize Active Navigation state based on current scroll position
+            updateActiveNav();
+        });
+
+        // Optional: Re-initialize desktop/mobile view classes on resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) {
+                // When resizing to desktop: ensure sidebar is visible and content is pushed
+                if (sidebar.classList.contains('hidden-sidebar')) {
+                    // Only apply 'hidden' state if user actively hid it previously, otherwise ensure open
+                } else {
+                    sidebar.classList.remove('hidden-sidebar');
+                    contentWrapper.classList.remove('full-width');
+                    fixedControls.classList.remove('full-width');
+                }
+                // Remove mobile overlay class
+                sidebar.classList.remove('active-mobile');
+            } else {
+                // When resizing to mobile: ensure desktop classes are removed
+                sidebar.classList.remove('hidden-sidebar');
+                contentWrapper.classList.remove('full-width');
+                fixedControls.classList.remove('full-width');
+                // Ensure mobile state is hidden by default
+                sidebar.classList.remove('active-mobile');
+            }
+        });
+
+
+        // --- NAVIGATION & LAYOUT LOGIC ---
+
+        /** Toggles the visibility of the navigation sidebar */
+        function toggleSidebar() {
+            if (window.innerWidth >= 768) {
+                // DESKTOP LOGIC: Toggle the hidden-sidebar class and adjust content margin
+                const isHidden = sidebar.classList.toggle('hidden-sidebar');
+                contentWrapper.classList.toggle('full-width', isHidden);
+                fixedControls.classList.toggle('full-width', isHidden);
+            } else {
+                // MOBILE LOGIC: Toggle the active-mobile overlay class
+                sidebar.classList.toggle('active-mobile');
+            }
+        }
+
+        /** Updates the active link in the sidebar based on scroll position */
+        function updateActiveNav() {
+            const sections = document.querySelectorAll('.module-section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            let current = '';
+
+            sections.forEach(section => {
+                // Use 100px offset to trigger the current state slightly before the section reaches the very top
+                if (scrollY >= section.offsetTop - 100) { 
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                // Remove previous active classes
+                link.classList.remove('current-module', 'accent-indigo', 'accent-cyan', 'accent-green', 'accent-red');
+                link.classList.remove('bg-gray-300');
+                link.classList.add('bg-gray-200');
+
+                if (link.getAttribute('href').includes(current)) {
+                    const accent = link.getAttribute('data-accent');
+                    link.classList.add('current-module', accent, 'bg-gray-300');
+                    link.classList.remove('bg-gray-200');
+                }
+            });
+        }
+        window.addEventListener('scroll', updateActiveNav);
+
+
+        // --- MODULE 2: PROCESS BLOCK LOGIC ---
+
+        function updateProcessDisplay() {
+            document.querySelectorAll('.process-step').forEach(step => {
+                step.classList.remove('active');
+            });
+            const currentStepElement = document.getElementById(`step-${currentStep}`);
+            if (currentStepElement) {
+                currentStepElement.classList.add('active');
+            }
+
+            document.getElementById('step-counter').textContent = `${currentStep} of ${totalSteps}`;
+            document.getElementById('prev-btn').disabled = currentStep === 1;
+            document.getElementById('next-btn').disabled = currentStep === totalSteps;
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateProcessDisplay();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateProcessDisplay();
+            }
+        }
+
+
+        // --- MODULE 3: FLASHCARD LOGIC ---
+
+        /** Toggles the 'flipped' class on the card for click-to-flip action */
+        function flipCard(cardElement) {
+            cardElement.classList.toggle('flipped');
+        }
+
+
+        // --- MODULE 6: ACCORDION LOGIC ---
+
+        /** Toggles the visibility of an accordion content area */
+        function toggleLesson(id) {
+            const content = document.getElementById(id);
+            const header = content.previousElementSibling;
+            const icon = header.querySelector('.accordion-icon');
+
+            if (content.classList.contains('active')) {
+                // Collapse
+                content.classList.remove('active');
+                header.classList.remove('active');
+                icon.innerHTML = '+';
+            } else {
+                // Expand
+                content.classList.add('active');
+                header.classList.add('active');
+                icon.innerHTML = '×';
+            }
+        }
+
+
+        // --- MODULE 7: READING MODE LOGIC ---
+
+        /** Toggles the high-contrast reading mode for accessibility */
+        function toggleReadingMode() {
+            document.body.classList.toggle('reading-mode');
+            const button = document.getElementById('toggle-reading-mode-btn');
+            if (document.body.classList.contains('reading-mode')) {
+                button.classList.replace('bg-gray-600', 'bg-yellow-600');
+                button.title = 'Disable Reading Mode';
+            } else {
+                button.classList.replace('bg-yellow-600', 'bg-gray-600');
+                button.title = 'Enable Reading Mode';
+            }
+        }
+
+
+        // --- KNOWLEDGE CHECK LOGIC (Module 1 - 8) ---
+
+        /** Generic function for checking multiple choice questions */
+        function checkMultipleChoice(questionId, correctValue) {
+            const container = document.querySelector(`.feedback-${questionId}`).closest('.knowledge-check-item');
+            const selected = container.querySelector(`input[name="${questionId}"]:checked`);
+            const feedbackElement = container.querySelector(`.feedback-${questionId}`);
+
+            feedbackElement.classList.remove('hidden');
+            
+            if (selected && selected.value === correctValue) {
+                feedbackElement.innerHTML = '<span class="text-green-600">Correct! Well done.</span>';
+                feedbackElement.classList.replace('text-red-600', 'text-green-600');
+            } else {
+                feedbackElement.innerHTML = `<span class="text-red-600">Incorrect. Review the module content and try again.</span>`;
+                feedbackElement.classList.replace('text-green-600', 'text-red-600');
+            }
+        }
+
+        /** Generic function for checking fill-in-the-blank questions */
+        function checkFillInTheBlank(questionId, correctAnswers) {
+            const inputElement = document.getElementById(`${questionId}_input`);
+            const feedbackElement = document.querySelector(`.feedback-${questionId}`);
+            const userAnswer = inputElement.value.trim().toLowerCase();
+            
+            // Check if the user answer contains any of the correct answers
+            const isCorrect = correctAnswers.some(answer => userAnswer.includes(answer.toLowerCase()));
+
+            feedbackElement.classList.remove('hidden');
+
+            if (isCorrect) {
+                feedbackElement.innerHTML = '<span class="text-green-600">Correct! That is a key term.</span>';
+                feedbackElement.classList.replace('text-red-600', 'text-green-600');
+            } else {
+                feedbackElement.innerHTML = '<span class="text-red-600">Incorrect. Review the content and try again.</span>';
+                feedbackElement.classList.replace('text-green-600', 'text-red-600');
+            }
+        }
+
+
+        // --- ATTACH LISTENERS TO KNOWLEDGE CHECK BUTTONS ---
+        document.querySelectorAll('.knowledge-check-activity').forEach(activity => {
+            activity.querySelectorAll('button').forEach(button => {
+                const item = button.closest('.knowledge-check-item');
+                const radioName = item.querySelector('input[type="radio"]') ? item.querySelector('input[type="radio"]').name : null;
+                // const fillInId = item.querySelector('input[type="text"]') ? item.querySelector('input[type="text"]').id : null; // Not needed here, only for text checks
+
+                if (radioName) {
+                    button.addEventListener('click', () => {
+                        // Logic based on radioName (Question ID)
+                        switch (radioName) {
+                            case 'kc1_q1': checkMultipleChoice('kc1_q1', 'b'); break;
+                            case 'kc1_q3': checkMultipleChoice('kc1_q3', 'false'); break;
+                            case 'kc2_q1': checkMultipleChoice('kc2_q1', 'b'); break;
+                            case 'kc2_q2': checkMultipleChoice('kc2_q2', 'c'); break; 
+                            case 'kc3_q1': checkMultipleChoice('kc3_q1', 'c'); break;
+                            case 'kc3_q2': checkMultipleChoice('kc3_q2', 'false'); break;
+                            case 'kc4_q1': checkMultipleChoice('kc4_q1', 'false'); break;
+                            case 'kc4_q2': checkMultipleChoice('kc4_q2', 'c'); break;
+                            case 'kc5_q1': checkMultipleChoice('kc5_q1', 'b'); break;
+                            case 'kc5_q2': checkMultipleChoice('kc5_q2', 'false'); break;
+                            case 'kc6_q1': checkMultipleChoice('kc6_q1', 'c'); break;
+                            case 'kc7_q1': checkMultipleChoice('kc7_q1', 'false'); break;
+                            case 'kc7_q2': checkMultipleChoice('kc7_q2', 'b'); break;
+                            case 'kc8_q1': checkMultipleChoice('kc8_q1', 'b'); break;
+                            case 'kc8_q2': checkMultipleChoice('kc8_q2', 'false'); break;
+                            default: break;
+                        }
+                    });
+                }
+            });
+        });
+
+        // Attach listeners for fill-in-the-blank checks (Note: these buttons must be the immediate next sibling of the input)
+        document.getElementById('kc1_q2_input')?.nextElementSibling?.addEventListener('click', () => {
+            checkFillInTheBlank('kc1_q2', ['split-screen', 'splitscreen']);
+        });
+        document.getElementById('kc3_q3_input')?.nextElementSibling?.addEventListener('click', () => {
+            checkFillInTheBlank('kc3_q3', ['Lesson']);
+        });
+        document.getElementById('kc6_q2_input')?.nextElementSibling?.addEventListener('click', () => {
+            checkFillInTheBlank('kc6_q2', ['weeding', 'weed']);
+        });
+    </script>
+</body>
+</html>
