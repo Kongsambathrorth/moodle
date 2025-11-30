@@ -48,7 +48,7 @@
         <nav id="module-nav" class="flex flex-col gap-2">
             <!-- Nav links use JS/CSS for styling and active state tracking -->
             <a href="#module-1" data-accent="accent-indigo" class="nav-link text-sm px-3 py-2 rounded-lg transition duration-150" onclick="if(window.innerWidth < 768) toggleSidebar()">1. 👋 Welcome & Intro</a>
-            <a href="#module-2" data-accent="accent-indigo" class="nav-link text-sm px-3 py-2 rounded-lg transition duration-150" onclick="if(window.innerWidth < 768) toggleSidebar()">2. ⚙️ Fundamentals of eCourse Creation</a>
+            <a href="#module-2" data-accent="accent-indigo" class="nav-link text-sm px-3 py-2 rounded-lg transition duration-150" onclick="if(window.innerWidth < 768) toggleSidebar()">2. ⚙️ eCourse Creation</a>
             <a href="#module-3" data-accent="accent-indigo" class="nav-link text-sm px-3 py-2 rounded-lg transition duration-150" onclick="if(window.innerWidth < 768) toggleSidebar()">3. 🧩 Moodle Activities & Resources</a>
             <a href="#module-4" data-accent="accent-indigo" class="nav-link text-sm px-3 py-2 rounded-lg transition duration-150" onclick="if(window.innerWidth < 768) toggleSidebar()">4. 👤 Instructor Role & Responsibilities</a>
             <a href="#module-5" data-accent="accent-cyan" class="nav-link text-sm px-3 py-2 rounded-lg transition duration-150" onclick="if(window.innerWidth < 768) toggleSidebar()">5. 📐 ID Strategy: ADDIE Model</a>
@@ -86,16 +86,16 @@
                 **Workshop Version 18.11.2025**
             </p>
             <p class="mt-4 text-gray-700 italic">
-                Think of this as your Moodle Course Creator handbook. Don't worry about reading everything right now—focus on the basics, and use the optional sections as a library to help you with future projects.
+                Think of this as your Moodle Course Creator handbook. Don't worry about reading for details right now—focus on the basics, and use the optional sections as a library to help you with future projects.
             </p>
         </div>
 
         <!-- Module 1: Welcome and introduction -->
         <section id="module-1" class="scroll-mt-custom module-section">
             <h2 class="text-2xl font-extrabold text-indigo-800 mb-4">1. 👋 Welcome and Introduction</h2>
-            <p class="text-gray-600 mb-4 font-medium">**Session Format:** Duration: 2 hours | Mode: Online (live virtual session) | Format: Presentation, demonstration, and interactive discussion.</p>
+            <p class="text-gray-600 mb-4 font-medium">Session Format: Duration: 2 hours | Mode: Online (live virtual session) | Format: Presentation, demonstration, and interactive discussion.</p>
             
-            <h3 class="text-xl font-bold text-gray-700 mt-6 mb-3 border-b pb-1">Expected Outcomes (Learning Objectives)</h3>
+            <h3 class="text-xl font-bold text-gray-700 mt-6 mb-3 border-b pb-1">Expected Outcomes</h3>
             <ul class="list-disc list-inside text-gray-600 space-y-2 ml-4">
                 <li>Understand the basic structure and components of an eCourse.</li>
                 <li>Learn the key responsibilities and expectations of RIF Academy instructors.</li>
@@ -106,13 +106,12 @@
             
         </section>
 
-        <!-- Module 2: Fundamentals of eCourse Creation -->
+        <!-- Module 2: eCourse Creation -->
         <section id="module-2" class="scroll-mt-custom module-section">
-            <h2 class="text-2xl font-extrabold text-indigo-800 mb-4">2. ⚙️ Fundamentals of eCourse Creation</h2>
-            <p class="text-gray-600 mb-6 font-medium">**Agenda Items:** (Approx. 40 minutes) Understanding course structure, planning content, and introduction to basic content types.</p>
+            <h2 class="text-2xl font-extrabold text-indigo-800 mb-4">2. ⚙️ eCourse Creation</h2>
+            <p class="text-gray-600 mb-6 font-medium"> How to create course in Moodle</p>
             
-            <h3 class="text-xl font-bold text-gray-700 mt-6 mb-3 border-b pb-1">Core Setup Steps (5-Step Process)</h3>
-            
+                       
             <!-- Process Container -->
             <div class="bg-gray-50 p-6 rounded-lg shadow-inner">
                 <div id="process-steps" class="space-y-4 mb-6">
@@ -120,8 +119,7 @@
                     <div id="step-1" class="process-step active">
                         <div class="text-sm font-bold text-indigo-600 mb-2">Step 01 / 05</div>
                         <h4 class="text-xl font-extrabold text-gray-900 mb-3">Navigate to Site Administration</h4>
-                        <p class="text-gray-700 mb-4">Access the "Site administration" link from the main Moodle header menu. Only users with the Site Administrator role will see this option.</p>
-                        <div>
+                                                <div>
                             <img src="lib\images\step1.png" alt="Moodle Site Administration Menu" class="rounded-md shadow-md">
                             
                         </div>
@@ -130,10 +128,10 @@
                     <!-- Step 2 -->
                     <div id="step-2" class="process-step">
                         <div class="text-sm font-bold text-indigo-600 mb-2">Step 02 / 05</div>
-                        <h4 class="text-xl font-extrabold text-gray-900 mb-3">Manage Courses and Categories</h4>
-                        <p class="text-gray-700 mb-4">From the Site Administration block, click **"Manage courses and categories."** This opens the central course management screen.</p>
-                        <div class="h-24 bg-gray-300 rounded-md flex items-center justify-center mt-2">
-                            
+                        <h4 class="text-xl font-extrabold text-gray-900 mb-3">Clcik Manage Courses and Categories</h4>
+                        
+                        <div>
+                            <img src="lib\images\step2.png" alt="Moodle Site Administration Menu" class="rounded-md shadow-md">
                         </div>
                     </div>
 
@@ -141,9 +139,10 @@
                     <div id="step-3" class="process-step">
                         <div class="text-sm font-bold text-indigo-600 mb-2">Step 03 / 05</div>
                         <h4 class="text-xl font-extrabold text-gray-900 mb-3">Create Course (Select Category First)</h4>
-                        <p class="text-gray-700 mb-4">**Tip:** Before creating a course, decide which category you want it to belong to (e.g., "LEARNING MATERIALS"). Select the appropriate category first, then click **"Create new course."**</p>
-                        <div class="h-24 bg-gray-300 rounded-md flex items-center justify-center mt-2">
-                            
+                        
+                        
+                        <div>
+                            <img src="lib\images\step3.png" alt="Moodle Site Administration Menu" class="rounded-md shadow-md">
                         </div>
                     </div>
 
@@ -151,21 +150,30 @@
                     <div id="step-4" class="process-step">
                         <div class="text-sm font-bold text-indigo-600 mb-2">Step 04 / 05</div>
                         <h4 class="text-xl font-extrabold text-gray-900 mb-3">Begin Course Settings (General Tab)</h4>
-                        <p class="text-gray-700 mb-4">You will now see the **"Add a new course"** menu. Fill in the **General** settings (Full name, Short name, Course category, etc.) before proceeding.</p>
-                        <div class="h-24 bg-gray-300 rounded-md flex items-center justify-center mt-2">
-                            
-                        </div>
-                    </div>
+                       
+                        <div>
+                            <img src="lib\images\step4.png" alt="Moodle Site Administration Menu" class="rounded-md shadow-md">
+                        </div>  
+                    </div>                
                     
                     <!-- Step 5 -->
                     <div id="step-5" class="process-step">
                         <div class="text-sm font-bold text-indigo-600 mb-2">Step 05 / 05</div>
-                        <h4 class="text-xl font-extrabold text-gray-900 mb-3">Review Advanced Course Settings</h4>
-                        <p class="text-gray-700 mb-4">Review the remaining tabs (Description, Course format, Appearance, Files and uploads, Completion tracking, etc.).</p>
-                        <div class="aspect-video bg-gray-300 rounded-lg flex items-center justify-center mt-2 mb-3">
-                            <span class="text-gray-700 font-medium">Video Placeholder: Moodle 4 Course Settings Video (4-minutes)</span>
-                        </div>
-                        <p class="text-sm text-gray-500 mt-2">This video provides a walkthrough of the advanced settings you will encounter after saving the basic course details.</p>
+                        <h4 class="text-xl font-extrabold text-gray-900 mb-3">Watch 4-minute video to learn more about Moodle Course Settings</h4>
+                       
+                        
+                        
+                                <div class="relative w-full overflow-hidden" style="padding-top: 56.25%;">
+                                    <iframe
+                                        class="absolute top-0 left-0 w-full h-full rounded-md shadow-md"
+                                        src="https://www.youtube.com/embed/NVn8Jo5lyjs"
+                                        title="YouTube video player"
+                                        frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        referrerpolicy="strict-origin-when-cross-origin"
+                                        allowfullscreen
+                                    ></iframe>
+                                </div>
                     </div>
 
                 </div>
@@ -186,14 +194,13 @@
             <!-- End Process Container -->
 
             <!-- ADDITIONAL RESOURCES 2 -->
-            <div class="mt-8 p-6 bg-gray-100 rounded-xl border-l-4 border-cyan-500 shadow-sm">
-                <h4 class="text-xl font-bold text-gray-700 mb-3 border-b border-gray-300 pb-1">Additional Resources</h4>
-                <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4 text-sm">
-                    <li><a href="#" class="text-indigo-600 hover:underline">MoodleDocs: Managing Courses and Categories</a></li>
-                    <li><a href="#" class="text-indigo-600 hover:underline">RIF Academy Guide: Setting Course Enrollment Keys</a></li>
-                    <li><a href="#" class="text-indigo-600 hover:underline">Moodle Video Tutorial: Course Formats (Topics vs. Weekly)</a></li>
-                </ul>
-            </div>
+                            <div class="mt-8 p-6 bg-gray-100 rounded-xl border-l-4 border-cyan-500 shadow-sm">
+                    <h4 class="text-xl font-bold text-gray-700 mb-3 border-b border-gray-300 pb-1">Additional Resources</h4>
+                    <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4 text-sm">
+                        <li><a href="https://docs.moodle.org/403/en/Managing_a_Moodle_course" class="text-indigo-600 hover:underline">MoodleDocs: Managing Courses and Categories</a></li>
+                        <li><a href="https://www.youtube.com/watch?v=ywIu4uFwSz0&t=60s" class="text-indigo-600 hover:underline">Moodle Video Tutorial: Course Formats</a></li>
+                    </ul>
+                </div>
 
             <!-- KNOWLEDGE CHECK 2 -->
             <div class="knowledge-check-activity bg-indigo-100 p-6 rounded-xl border-t-4 border-indigo-500 mt-10 shadow-inner">
@@ -307,22 +314,17 @@
             <div class="mt-8 p-4 bg-gray-100 rounded-lg border border-gray-200">
                 <p class="font-semibold text-gray-800">Further Detail:</p>
                 <div class="grid col-span-1 sm:grid-cols-2 gap-3 mt-2 text-sm">
-                    <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium">Video: Assignment in Moodle</a>
-                    <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium">Video: Quiz in Moodle</a>
-                    <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium">Video: Drop and drag files</a>
-                    <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium">Video: Sound and video display</a>
+                    <a href="https://www.youtube.com/watch?v=tdD0TBcwWVI" class="text-indigo-600 hover:text-indigo-800 font-medium">Video: Assignment in Moodle</a>
+                    <a href="https://www.youtube.com/watch?v=wubNjeEVWMU" class="text-indigo-600 hover:text-indigo-800 font-medium">Video: Quiz in Moodle</a>
+                    <a href="https://www.youtube.com/watch?v=8LJ4A4BPfx8" class="text-indigo-600 hover:text-indigo-800 font-medium">Video: Drop and drag files</a>
+                    <a href="https://www.youtube.com/watch?v=ywIu4uFwSz0&t=60s" class="text-indigo-600 hover:text-indigo-800 font-medium">Video: Sound and video display</a>
+                    
                 </div>
+
+               
             </div>
 
-            <!-- ADDITIONAL RESOURCES 3 -->
-            <div class="mt-8 p-6 bg-gray-100 rounded-xl border-l-4 border-cyan-500 shadow-sm">
-                <h4 class="text-xl font-bold text-gray-700 mb-3 border-b border-gray-300 pb-1">Additional Resources</h4>
-                <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4 text-sm">
-                    <li><a href="#" class="text-indigo-600 hover:underline">MoodleDocs: Comprehensive Activity Chooser Guide</a></li>
-                    <li><a href="#" class="text-indigo-600 hover:underline">RIF Academy Guide: Setting up a Group Submission Assignment</a></li>
-                    <li><a href="#" class="text-indigo-600 hover:underline">Video: Building Interactive Content with H5P in Moodle</a></li>
-                </ul>
-            </div>
+            
 
             <!-- KNOWLEDGE CHECK 3 -->
             <div class="knowledge-check-activity bg-indigo-100 p-6 rounded-xl border-t-4 border-indigo-500 mt-10 shadow-inner">
@@ -371,18 +373,14 @@
                 <!-- Managing Learners -->
                 <div class="p-4 bg-gray-50 rounded-lg shadow-sm">
                     <h3 class="text-xl font-semibold text-gray-700 mb-2">Managing Learners and Responding to Feedback</h3>
-                    <div class="h-32 bg-gray-300 rounded-md flex items-center justify-center mb-3">
-                        [Image of Instructor on Video Conference managing learners]
-                    </div>
+
                     <p class="text-sm text-gray-600">You are responsible for engaging with students, answering questions posted in forums, and providing timely feedback on assignments.</p>
                 </div>
 
                 <!-- Course Quality -->
                 <div class="p-4 bg-gray-50 rounded-lg shadow-sm">
                     <h3 class="text-xl font-semibold text-gray-700 mb-2">Maintaining Course Quality and Updates</h3>
-                    <div class="h-32 bg-gray-300 rounded-md flex items-center justify-center mb-3">
-                        
-                    </div>
+                   
                     <p class="text-sm text-gray-600">Ensure content remains current, links are functional, and the course structure is easy to navigate based on feedback and RIF Academy standards.</p>
                 </div>
                 
@@ -401,9 +399,8 @@
             <div class="mt-8 p-6 bg-gray-100 rounded-xl border-l-4 border-cyan-500 shadow-sm">
                 <h4 class="text-xl font-bold text-gray-700 mb-3 border-b border-gray-300 pb-1">Additional Resources</h4>
                 <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4 text-sm">
-                    <li><a href="#" class="text-indigo-600 hover:underline">MoodleDocs: The Moodle Gradebook Overview</a></li>
-                    <li><a href="#" class="text-indigo-600 hover:underline">RIF Academy Policy: Learner Communication and Response Time</a></li>
-                    <li><a href="#" class="text-indigo-600 hover:underline">MoodleDocs: Using Enrollment Keys and Self-Registration</a></li>
+                    <li><a href="https://docs.moodle.org/501/en/Grades" class="text-indigo-600 hover:underline">MoodleDocs: The Moodle Gradebook Overview</a></li>
+                    <li><a href="https://docs.moodle.org/501/en/Enrolment_key" class="text-indigo-600 hover:underline">MoodleDocs: Using Enrollment Keys and Self-Registration</a></li>
                 </ul>
             </div>
 
@@ -440,16 +437,16 @@
         <!-- Module 5: ADDIE Model (New Module) -->
         <section id="module-5" class="scroll-mt-custom module-section">
             <h2 class="text-2xl font-extrabold text-cyan-800 mb-4">5. 📐 ID Strategy: The ADDIE Model</h2>
-            <p class="text-gray-600 mb-6 font-medium">The **ADDIE Model (Analysis, Design, Development, Implementation, Evaluation)** is a five-phase framework used to manage and standardize the creation of training materials across RIF Academy. It ensures all courses are effective, measurable, and meet specific learning needs.</p>
+            <p class="text-gray-600 mb-6 font-medium">The ADDIE Model (Analysis, Design, Development, Implementation, Evaluation) is a five-phase framework used to manage and standardize the creation of training materials across RIF Academy. It ensures all courses are effective, measurable, and meet specific learning needs.</p>
             
             <div class="space-y-8">
                 
-                <!-- The ADDIE Overview Graphic -->
-                <div class="p-4 bg-cyan-50 rounded-lg shadow-md flex justify-center mb-6">
-                    <div class="w-full max-w-lg h-40 bg-gray-300 rounded-lg flex items-center justify-center">
-                        [Image of the ADDIE Model diagram]
-                    </div>
-                </div>
+                    <video controls width="640" height="360" poster="path/to/video-poster-image.jpg">
+                    <source src="/lib/video/addie.mp4" type="video/mp4">
+                     Sorry, your browser doesn't support the embedded video.
+                    </video>
+                        
+                
 
                 <!-- Lesson 5.1: The Design Phase (Content Blueprint) -->
                 <div class="p-4 bg-cyan-50 rounded-lg shadow-sm">
@@ -458,15 +455,13 @@
                     
                     <div class="addie-point p-3 bg-white rounded-lg border border-cyan-200 mb-3">
                         <p class="font-semibold text-gray-800">1. Define Learning Objectives (Goal Setting)</p>
-                        <p class="text-sm text-gray-600 ml-4 mt-1">Start by defining clear, measurable, and concise objectives (Tip 2). These objectives directly guide your selection of Moodle activities and assessment strategies.</p>
+                        <p class="text-sm text-gray-600 ml-4 mt-1">Start by defining clear, measurable, and concise objectives. These objectives directly guide your selection of Moodle activities and assessment strategies.</p>
                     </div>
                     
                     <div class="addie-point p-3 bg-white rounded-lg border border-cyan-200 mb-3">
                         <p class="font-semibold text-gray-800">2. Sequence the Content and Activities (Flow)</p>
-                        <p class="text-sm text-gray-600 ml-4 mt-1">Choose an appropriate content sequence (Chronological, Topical, Known-to-Unknown, etc.) (Tip 3). Map out where Moodle **Pages** introduce concepts and where **Quizzes/Assignments** apply them.</p>
-                        <div class="h-10 bg-gray-300 rounded-md flex items-center justify-center mt-2">
-                            
-                        </div>
+                        <p class="text-sm text-gray-600 ml-4 mt-1">Choose an appropriate content sequence (Chronological, Topical, Known-to-Unknown, etc.) (Tip 3). Map out where Moodle *Pages* introduce concepts and where *Quizzes/Assignments* apply them.</p>
+
                     </div>
                     
                     <div class="addie-point p-3 bg-white rounded-lg border border-cyan-200 mb-3">
@@ -476,7 +471,7 @@
                     
                     <div class="addie-point p-3 bg-white rounded-lg border border-cyan-200 mb-3">
                         <p class="font-semibold text-gray-800">4. Determine Assessment Strategy</p>
-                        <p class="text-sm text-gray-600 ml-4 mt-1">Decide whether to use Moodle's built-in tools (Quiz, Workshop) or external tools for scoring. If using the **Assignment** activity, plan to use a **Rubric** for transparent, multi-criteria assessment.</p>
+                        <p class="text-sm text-gray-600 ml-4 mt-1">Decide whether to use Moodle's built-in tools (Quiz, Workshop) or external tools for scoring. If using the *Assignment* activity, plan to use a **Rubric** for transparent, multi-criteria assessment.</p>
                     </div>
 
                     <h4 class="text-lg font-bold text-gray-700 mt-6 mb-3 border-b border-cyan-300 pb-1">Practical Example: Gender Equity Awareness Blueprint</h4>
@@ -484,7 +479,7 @@
                     <!-- Content Blueprint Table (Embedded from content_blueprint_example.md) -->
                     <div class="overflow-x-auto bg-white p-4 rounded-lg shadow-inner">
                         <h5 class="text-base font-bold text-gray-800 mb-2">Content Blueprint: Gender Equity Awareness for Microfinance Staff</h5>
-                        <p class="xs text-gray-600 mb-3">**Course Goal:** Equip microfinance staff with foundational awareness and tools to recognize and address gender biases.</p>
+                        <p class="xs text-gray-600 mb-3">*Course Goal:* Equip microfinance staff with foundational awareness and tools to recognize and address gender biases.</p>
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
@@ -508,21 +503,21 @@
                                     <td class="px-3 py-2">Identify at least three common unconscious biases impacting loan decisions.</td>
                                     <td class="px-3 py-2">Whole-to-Part</td>
                                     <td class="px-3 py-2">Activity: H5P (Interactive Video/Quiz)</td>
-                                    <td class="px-3 py-2">**Video:** Demonstration of a biased loan interview. **Activity:** Embedded H5P Knowledge Check (3 questions).</td>
+                                    <td class="px-3 py-2">Video: Demonstration of a biased loan interview. **Activity:** Embedded H5P Knowledge Check (3 questions).</td>
                                 </tr>
                                 <tr>
                                     <td class="px-3 py-2 font-semibold">3. Equitable Service</td>
                                     <td class="px-3 py-2">Learn how to adjust client interaction process to be gender-sensitive.</td>
                                     <td class="px-3 py-2">Procedural/Step-by-Step</td>
                                     <td class="px-3 py-2">Resource: Book</td>
-                                    <td class="px-3 py-2">**Book:** Chapter 1: Outreach & Marketing (Text & Images). Chapter 2: Client Assessment (Checklist). ****</td>
+                                    <td class="px-3 py-2">Book: Chapter 1: Outreach & Marketing (Text & Images). Chapter 2: Client Assessment (Checklist). ****</td>
                                 </tr>
                                 <tr>
                                     <td class="px-3 py-2 font-semibold">4. Action & Commitment</td>
                                     <td class="px-3 py-2">Commit to one specific action to improve gender equity within their branch or role.</td>
                                     <td class="px-3 py-2">General-to-Specific</td>
                                     <td class="px-3 py-2">Activity: Assignment</td>
-                                    <td class="px-3 py-2">**Assignment:** Online Text submission. Prompt: "What specific action will you implement... (Tip 41 - End-of-Course Experience)."</td>
+                                    <td class="px-3 py-2">Assignment:Online Text submission. Prompt: "What specific action will you implement... (Tip 41 - End-of-Course Experience)."</td>
                                 </tr>
                                 <tr>
                                     <td class="px-3 py-2 font-semibold">5. Wrap-Up & Feedback</td>
@@ -571,13 +566,13 @@
                 </div>
             </div>
 
+           
             <!-- ADDITIONAL RESOURCES 5 -->
             <div class="mt-8 p-6 bg-gray-100 rounded-xl border-l-4 border-cyan-500 shadow-sm">
                 <h4 class="text-xl font-bold text-gray-700 mb-3 border-b border-gray-300 pb-1">Additional Resources</h4>
                 <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4 text-sm">
-                    <li><a href="#" class="text-indigo-600 hover:underline">MoodleDocs: Using Rubrics and Advanced Grading</a></li>
-                    <li><a href="#" class="text-indigo-600 hover:underline">RIF Academy Template: Course Design Document (CDD)</a></li>
-                    <li><a href="#" class="text-indigo-600 hover:underline">External Article: Applying ADDIE to Microfinance Training</a></li>
+                    <li><a href="https://docs.moodle.org/501/en/Rubrics" class="text-indigo-600 hover:underline">MoodleDocs: Using Rubrics and Advanced Grading</a></li>
+                    <li><a href="https://research.com/education/the-addie-model#:~:text=Developed%20in%20the%201970s%2C%20this,et%20al.%2C%202005)." class="text-indigo-600 hover:underline">External Article: The ADDIE Model Explained: Evolution, Steps, and Applications for 2026</a></li>
                 </ul>
             </div>
 
@@ -615,7 +610,11 @@
         <section id="module-6" class="scroll-mt-custom module-section">
             <h2 class="text-2xl font-extrabold text-green-800 mb-4">6. 💡 Engagement and Retention Techniques</h2>
             <p class="text-gray-600 mb-6 font-medium">This module introduces essential pedagogical and design techniques to maximize learner retention and participation in your Moodle courses.</p>
-            
+            <a href="/lib/document/50-instructional-design.pdf" download="Optional_Filename_for_User.pdf">
+            You can read full article by downloading PDF => "50 Instructional Design Tips for Online Learning"
+            </a> 
+           
+           
             <div class="space-y-4">
                 
                 <!-- Expandable Section 6.1 -->
@@ -637,17 +636,13 @@
                             <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
                                 <p class="font-semibold text-gray-800">Master the 90-20-8 Rule (Tip 20)</p>
                                 <p class="text-sm text-gray-600 ml-4 mt-1">Keep lessons under 90 minutes. Change the pace or method every **20 minutes**. Involve the learner in an activity (poll, quiz, discussion) every **8 minutes** to ensure active participation.</p>
-                                <div class="h-10 bg-gray-300 rounded-md flex items-center justify-center mt-2">
-                                    
-                                </div>
+                                
                             </div>
                             
                             <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
                                 <p class="font-semibold text-gray-800">Set the Tone with Icebreakers (Tip 18)</p>
                                 <p class="text-sm text-gray-600 ml-4 mt-1">Use the Moodle **Forum** activity for a lighthearted, non-academic icebreaker at the start of the course to foster a friendly atmosphere and build community.</p>
-                                <div class="h-10 bg-gray-300 rounded-md flex items-center justify-center mt-2">
-                                    
-                                </div>
+                               
                             </div>
                             
                             <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
@@ -672,9 +667,7 @@
                             <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
                                 <p class="font-semibold text-gray-800">Apply the 80/20 Rule to Complexity (Tip 7)</p>
                                 <p class="text-sm text-gray-600 ml-4 mt-1">Identify the 20% of concepts that require 80% of the effort. Dedicate more content, examples, and Moodle quiz attempts to these complex topics.</p>
-                                <div class="h-10 bg-gray-300 rounded-md flex items-center justify-center mt-2">
-                                    
-                                </div>
+                                
                             </div>
                             
                             <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
@@ -685,9 +678,7 @@
                             <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
                                 <p class="font-semibold text-gray-800">Use Stories and Case Studies (Tips 30, 38)</p>
                                 <p class="text-sm text-gray-600 ml-4 mt-1">Use the Moodle **Assignment** or **Database** activity to present real-life **Case Studies** that develop critical analysis and decision-making skills.</p>
-                                <div class="h-10 bg-gray-300 rounded-md flex items-center justify-center mt-2">
-                                    
-                                </div>
+                                
                             </div>
                             
                             <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
@@ -712,22 +703,18 @@
                             <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
                                 <p class="font-semibold text-gray-800">Prioritize Distraction-Free Design (Tip 21)</p>
                                 <p class="text-sm text-gray-600 ml-4 mt-1">Stick to a clean, simple Moodle theme. Remove all unnecessary side-blocks, graphics, and elements that do not directly support the learning goal (weeding).</p>
-                                <div class="h-10 bg-gray-300 rounded-md flex items-center justify-center mt-2">
-                                    
-                                </div>
+                                
                             </div>
                             
                             <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
                                 <p class="font-semibold text-gray-800">Use Meaningful Images (Tip 22) & Consistent Color (Tips 24, 25)</p>
                                 <p class="text-sm text-gray-600 ml-4 mt-1">Prefer photos over clip art. Select powerful images that evoke positive emotions for better retention. When using Moodle's Text and Media areas, use a consistent color palette (2-3 colors max) for visual simplicity.</p>
-                                <div class="h-10 bg-gray-300 rounded-md flex items-center justify-center mt-2">
-                                    
-                                </div>
+                                
                             </div>
                             
                             <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
                                 <p class="font-semibold text-gray-800">Encourage Motivation (Tip 46) & Feedback (Tip 12)</p>
-                                <p class="text-sm text-gray-600 ml-4 mt-1">Use Moodle's **Badges** or **Certificates** for extrinsic motivation. Gather **mid-course** feedback (using the Moodle **Feedback** activity) to adjust content and demonstrate responsiveness to learners.</p>
+                                <p class="text-sm text-gray-600 ml-4 mt-1">Use Moodle's *Badges* or *Certificates* for extrinsic motivation. Gather *mid-course* feedback (using the Moodle *Feedback* activity) to adjust content and demonstrate responsiveness to learners.</p>
                             </div>
                             
                             <div class="lesson-point p-3 bg-white rounded-lg border border-green-200 mb-3">
@@ -744,9 +731,11 @@
             <div class="mt-8 p-6 bg-gray-100 rounded-xl border-l-4 border-cyan-500 shadow-sm">
                 <h4 class="text-xl font-bold text-gray-700 mb-3 border-b border-gray-300 pb-1">Additional Resources</h4>
                 <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4 text-sm">
-                    <li><a href="#" class="text-indigo-600 hover:underline">RIF Academy Guide: Best Practices for Video Production</a></li>
-                    <li><a href="#" class="text-indigo-600 hover:underline">External Article: The Science Behind the 90-20-8 Rule</a></li>
-                    <li><a href="#" class="text-indigo-600 hover:underline">Tool Guide: Creating Free Stock Images and Graphics</a></li>
+                    <li><a href="https://www.youtube.com/watch?v=sqaWPo4z7jk" class="text-indigo-600 hover:underline">Tool Guide: Creating Free Stock Images and Graphics</a></li>
+                    <li><a href="/lib/document/50-instructional-design.pdf" download="Optional_Filename_for_User.pdf">
+                        Download PDF: "50 Instructional Design Tips for Online Learning"
+                    </a>   
+                    </li>
                 </ul>
             </div>
 
@@ -786,7 +775,7 @@
                 
                 <div class="p-4 bg-red-50 rounded-lg shadow-sm">
                     <h3 class="text-xl font-semibold text-gray-700 mb-3 border-b border-red-300 pb-1">7.1 Understanding Reading Mode</h3>
-                    <p class="text-sm text-gray-700 mb-3">Reading Mode globally changes the aesthetic properties of the page to prioritize text clarity over design complexity. This is especially useful for consuming large amounts of text (e.g., Moodle **Page** or **Book** resources).</p>
+                    <p class="text-sm text-gray-700 mb-3">Reading Mode globally changes the aesthetic properties of the page to prioritize text clarity over design complexity. This is especially useful for consuming large amounts of text (e.g., Moodle "Page" or "Book" resources).</p>
                     
                     <div class="lesson-point p-3 bg-white rounded-lg border border-red-200 mb-3">
                         <p class="font-semibold text-gray-800">High-Contrast Palette</p>
@@ -800,7 +789,7 @@
                     
                     <div class="lesson-point p-3 bg-white rounded-lg border border-red-200 mb-3">
                         <p class="font-semibold text-gray-800">Usage:</p>
-                        <p class="text-sm text-gray-600 ml-4 mt-1">To activate this mode, click the **"Aa"** button next to the main menu toggle. Encourage learners to use it when reading text-heavy materials.</p>
+                        <p class="text-sm text-gray-600 ml-4 mt-1">To activate this mode, click the "Aa" button next to the main menu toggle. Encourage learners to use it when reading text-heavy materials.</p>
                     </div>
                 </div>
 
@@ -809,9 +798,9 @@
                     <p class="text-sm text-gray-700 mb-3">Beyond reading mode, remember to format content correctly within Moodle:</p>
                     
                     <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4 text-sm">
-                        <li>**Use Moodle's built-in heading styles** (Heading 2, 3, 4) in the text editor for proper screen reader navigation.</li>
-                        <li>**Provide Alt Text** for all images you upload (Tip 22).</li>
-                        <li>**Ensure all videos include captions** (Moodle supports this via video embed options).</li>
+                        <li>*Use Moodle's built-in heading styles* (Heading 2, 3, 4) in the text editor for proper screen reader navigation.</li>
+                        <li>*Provide Alt Text* for all images you upload (Tip 22).</li>
+                        <li>*Ensure all videos include captions* (Moodle supports this via video embed options).</li>
                     </ul>
                     <div class="h-10 bg-gray-300 rounded-md flex items-center justify-center mt-2">
                         
@@ -823,9 +812,8 @@
             <div class="mt-8 p-6 bg-gray-100 rounded-xl border-l-4 border-red-500 shadow-sm">
                 <h4 class="text-xl font-bold text-gray-700 mb-3 border-b border-gray-300 pb-1">Additional Resources</h4>
                 <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4 text-sm">
-                    <li><a href="#" class="text-indigo-600 hover:underline">MoodleDocs: Accessibility Best Practices</a></li>
-                    <li><a href="#" class="text-indigo-600 hover:underline">Web Content Accessibility Guidelines (WCAG) Quick Reference</a></li>
-                    <li><a href="#" class="text-indigo-600 hover:underline">RIF Academy Checklist: Accessible Content Creation</a></li>
+                    <li><a href="https://docs.moodle.org/501/en/Accessibility" class="text-indigo-600 hover:underline">MoodleDocs: Accessibility Best Practices</a></li>
+                    <li><a href="https://www.w3.org/WAI/WCAG22/quickref/" class="text-indigo-600 hover:underline">Web Content Accessibility Guidelines (WCAG) Quick Reference</a></li>
                 </ul>
             </div>
 
@@ -869,18 +857,16 @@
                 <div class="p-4 bg-indigo-50 rounded-lg shadow-sm">
                     <h3 class="text-xl font-semibold text-gray-700 mb-2">What is a SCORM Package?</h3>
                     <p class="text-sm text-gray-600">A SCORM package is a collection of files (usually packaged as a ZIP file) created by authoring tools (like Articulate Storyline or Adobe Captivate). It acts as a common language that Moodle understands, allowing interactive multimedia content and assessments to be uploaded and tracked.</p>
-                    <div class="h-20 bg-gray-300 rounded-md flex items-center justify-center mt-3">
-                        
-                    </div>
+                   
                 </div>
 
                 <!-- Use Cases -->
                 <div class="p-4 bg-indigo-50 rounded-lg shadow-sm">
                     <h3 class="text-xl font-semibold text-gray-700 mb-2">When to use the SCORM Activity in Moodle</h3>
                     <ul class="list-disc list-inside text-gray-600 ml-4 text-sm space-y-1">
-                        <li>**Interactive Multimedia:** For presenting complex animations, simulations, or scenarios created outside of Moodle's native editor.</li>
-                        <li>**Automated Assessment:** When content includes detailed, scored questions that must be tracked automatically (SCORM reports the score directly to the Moodle Gradebook).</li>
-                        <li>**Interoperability:** If you need to reuse content created for another LMS platform.</li>
+                        <li>*Interactive Multimedia:* For presenting complex animations, simulations, or scenarios created outside of Moodle's native editor.</li>
+                        <li>*Automated Assessment:* When content includes detailed, scored questions that must be tracked automatically (SCORM reports the score directly to the Moodle Gradebook).</li>
+                        <li>*Interoperability:* If you need to reuse content created for another LMS platform.</li>
                     </ul>
                 </div>
 
@@ -888,39 +874,32 @@
                 <div class="p-4 bg-indigo-50 rounded-lg shadow-sm">
                     <h3 class="text-xl font-semibold text-gray-700 mb-3 border-b border-indigo-300 pb-1">Procedure: Uploading Rise 360 SCORM to Moodle</h3>
                     
-                    <p class="text-sm text-gray-600 mb-4">Follow these steps in Moodle to deploy your Rise 360 output ZIP file:</p>
-
-                    <!-- VIDEO PLACEHOLDER FOR SCORM UPLOAD -->
-                    <div class="aspect-video bg-gray-300 rounded-lg flex items-center justify-center mb-4">
-                        <span class="text-gray-700 font-medium text-lg">Video Placeholder: How to upload a SCORM package in Moodle Activity</span>
+                    <div class="relative w-full overflow-hidden" style="padding-top: 0.25%;">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/RuQugje6HNs?si=V3QqARAifI4vO2_r" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                     </div>
-
+                    
                     <div class="process-container space-y-4">
                         <div class="lesson-point p-3 bg-white rounded-lg border border-indigo-200 mb-3">
                             <p class="font-semibold text-gray-800">Step 1: Locate SCORM Activity</p>
-                            <p class="text-xs text-gray-600 mt-1">In your Moodle course, click **"Turn editing on"**, then **"Add an activity or resource,"** and select **"SCORM package."**</p>
+                            <p class="text-xs text-gray-600 mt-1">In your Moodle course, click "Turn editing on", then "Add an activity or resource," and select "SCORM package."</p>
                         </div>
                         <div class="lesson-point p-3 bg-white rounded-lg border border-indigo-200 mb-3">
                             <p class="font-semibold text-gray-800">Step 2: Upload ZIP File</p>
-                            <p class="text-xs text-gray-600 mt-1">Under the **"Package"** section, drag and drop the **Rise 360 output ZIP file** into the designated file area.</p>
-                            <div class="h-10 bg-gray-300 rounded-md flex items-center justify-center mt-2">
-                                
-                            </div>
+                            <p class="text-xs text-gray-600 mt-1">Under the "Package" section, drag and drop the Rise 360 output ZIP file* into the designated file area.</p>
+                       
                         </div>
                         <div class="lesson-point p-3 bg-white rounded-lg border border-indigo-200 mb-3">
                             <p class="font-semibold text-gray-800">Step 3: Configure Appearance (Optional)</p>
-                            <p class="text-xs text-gray-600 mt-1">Under **"Appearance,"** choose how the content displays (e.g., **New window** or **Current window**). This affects the user experience.</p>
+                            <p class="text-xs text-gray-600 mt-1">Under "Appearance," choose how the content displays (e.g., New window or Current window). This affects the user experience.</p>
                         </div>
                         <div class="lesson-point p-3 bg-white rounded-lg border border-indigo-200 mb-3">
                             <p class="font-semibold text-gray-800">Step 4: Configure Grade (Important)</p>
-                            <p class="text-xs text-gray-600 mt-1">Under **"Grade,"** verify the maximum grade, grading method, and ensure the score is passed correctly from the SCORM package to the Moodle Gradebook.</p>
-                            <div class="h-10 bg-gray-300 rounded-md flex items-center justify-center mt-2">
-                                
-                            </div>
+                            <p class="text-xs text-gray-600 mt-1">Under "Grade," verify the maximum grade, grading method, and ensure the score is passed correctly from the SCORM package to the Moodle Gradebook.</p>
+                    
                         </div>
                         <div class="lesson-point p-3 bg-white rounded-lg border border-indigo-200 mb-3">
                             <p class="font-semibold text-gray-800">Step 5: Save and Display</p>
-                            <p class="text-xs text-gray-600 mt-1">Click **"Save and display."** Moodle will launch the package, allowing you to test the scoring and navigation.</p>
+                            <p class="text-xs text-gray-600 mt-1">Click "Save and display." Moodle will launch the package, allowing you to test the scoring and navigation.</p>
                         </div>
                     </div>
                 </div>
@@ -930,21 +909,13 @@
                     <h3 class="text-xl font-semibold text-gray-700 mb-2">SCORM vs. H5P (Important Distinction)</h3>
                     <p class="text-sm text-gray-600">While both create interactive content:</p>
                     <ul class="list-disc list-inside text-gray-600 ml-4 text-sm space-y-1">
-                        <li>**SCORM** requires external authoring software and is uploaded as a ZIP file. It is the industry standard for formal tracking.</li>
-                        <li>**H5P** is a Moodle plugin that allows you to build interactive content directly inside Moodle using your browser. It's simpler for quick, native interactions.</li>
+                        <li>SCORM requires external authoring software and is uploaded as a ZIP file. It is the industry standard for formal tracking.</li>
+                        <li>H5P is a Moodle plugin that allows you to build interactive content directly inside Moodle using your browser. It's simpler for quick, native interactions.</li>
                     </ul>
                 </div>
             </div>
 
-            <!-- ADDITIONAL RESOURCES 8 -->
-            <div class="mt-8 p-6 bg-gray-100 rounded-xl border-l-4 border-cyan-500 shadow-sm">
-                <h4 class="text-xl font-bold text-gray-700 mb-3 border-b border-gray-300 pb-1">Additional Resources</h4>
-                <ul class="list-disc list-inside text-gray-600 space-y-1 ml-4 text-sm">
-                    <li><a href="#" class="text-indigo-600 hover:underline">MoodleDocs: Using the SCORM Activity Module</a></li>
-                    <li><a href="#" class="text-indigo-600 hover:underline">Video Tutorial: Exporting Content to SCORM from Articulate Rise</a></li>
-                    <li><a href="#" class="text-indigo-600 hover:underline">External Guide: SCORM vs. Tin Can API (xAPI)</a></li>
-                </ul>
-            </div>
+           
 
             <!-- KNOWLEDGE CHECK 8 -->
             <div class="knowledge-check-activity bg-indigo-100 p-6 rounded-xl border-t-4 border-indigo-500 mt-10 shadow-inner">
